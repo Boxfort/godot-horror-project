@@ -1,0 +1,441 @@
+[gd_scene load_steps=21 format=3 uid="uid://dltlx5ruk6pwh"]
+
+[ext_resource type="Script" path="res://assets/scenes/player/PlayerController.cs" id="1_32mu5"]
+[ext_resource type="AudioStream" uid="uid://bwadfqgiogd4d" path="res://assets/scenes/player/step_01.wav" id="2_ajigu"]
+[ext_resource type="Script" path="res://assets/scenes/player/statemachine/PlayerStateMachine.cs" id="2_enp3y"]
+[ext_resource type="Script" path="res://assets/scenes/player/InteractionController.cs" id="3_8uuf1"]
+[ext_resource type="AudioStream" uid="uid://ba4lri3lg71yn" path="res://assets/scenes/player/step_02.wav" id="3_hp025"]
+[ext_resource type="Script" path="res://assets/scenes/player/PlayerHUD.cs" id="3_nvans"]
+[ext_resource type="AudioStream" uid="uid://dxme68bpnttqt" path="res://assets/scenes/player/step_03.wav" id="4_4gbhv"]
+[ext_resource type="Texture2D" uid="uid://cjgee0wsb18ga" path="res://assets/scenes/player/ui/InteractCorner.png" id="5_h3h4f"]
+[ext_resource type="AudioStream" uid="uid://dm0jok7sn2mg3" path="res://assets/scenes/player/step_04.wav" id="5_t5yvj"]
+[ext_resource type="AudioStream" uid="uid://b52deootvup87" path="res://assets/scenes/player/step_05.wav" id="6_6xrp2"]
+[ext_resource type="Texture2D" uid="uid://cbbobv1xgo1n6" path="res://assets/scenes/player/ui/mouse_left.png" id="7_gl4s2"]
+[ext_resource type="AudioStream" uid="uid://b7t723ayt2er2" path="res://assets/scenes/player/step_06.wav" id="7_vxxac"]
+[ext_resource type="AudioStream" uid="uid://n20kppsrgpa1" path="res://assets/scenes/player/step_07.wav" id="8_7q8r7"]
+[ext_resource type="Texture2D" uid="uid://6yihtkkijq1m" path="res://assets/scenes/player/ui/mouse_right.png" id="9_kctl2"]
+[ext_resource type="AudioStream" uid="uid://b6gegdlslu2ns" path="res://assets/scenes/player/step_08.wav" id="9_y1jbt"]
+[ext_resource type="AudioStream" uid="uid://njjvve5kafh4" path="res://assets/scenes/player/step_09.wav" id="10_qtoms"]
+[ext_resource type="Texture2D" uid="uid://4vdv01utongj" path="res://assets/scenes/player/ui/mouse_middle.png" id="10_wi3c2"]
+[ext_resource type="Script" path="res://assets/scenes/player/FadeIn.cs" id="24_0pnd2"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ttiaw"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_7cs16"]
+
+[node name="PlayerController" type="CharacterBody3D" groups=["player"]]
+collision_layer = 16
+script = ExtResource("1_32mu5")
+footstepAudios = Array[AudioStream]([ExtResource("2_ajigu"), ExtResource("3_hp025"), ExtResource("4_4gbhv"), ExtResource("5_t5yvj"), ExtResource("6_6xrp2"), ExtResource("7_vxxac"), ExtResource("8_7q8r7"), ExtResource("9_y1jbt"), ExtResource("10_qtoms")])
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("2_enp3y")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+
+[node name="PlayerCamera" type="Camera3D" parent="Head"]
+
+[node name="InteractionController" type="RayCast3D" parent="Head"]
+target_position = Vector3(0, 0, -2.25)
+collision_mask = 3
+script = ExtResource("3_8uuf1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_ttiaw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_7cs16")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.696497, 0)
+light_energy = 0.05
+omni_range = 1.49952
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." groups=["player_hud"]]
+script = ExtResource("3_nvans")
+
+[node name="UI" type="Control" parent="CanvasLayer"]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Crosshair" type="Control" parent="CanvasLayer/UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dot" type="ColorRect" parent="CanvasLayer/UI/Crosshair"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.501961)
+
+[node name="InteractOutlineContainer" type="Control" parent="CanvasLayer/UI"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopLeft" type="Control" parent="CanvasLayer/UI/InteractOutlineContainer"]
+anchors_preset = 0
+offset_right = 16.0
+offset_bottom = 16.0
+pivot_offset = Vector2(8, 8)
+
+[node name="TL" type="TextureRect" parent="CanvasLayer/UI/InteractOutlineContainer/TopLeft"]
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+pivot_offset = Vector2(8, 8)
+texture = ExtResource("5_h3h4f")
+
+[node name="BottomLeft" type="Control" parent="CanvasLayer/UI/InteractOutlineContainer"]
+anchors_preset = 0
+offset_right = 16.0
+offset_bottom = 16.0
+pivot_offset = Vector2(8, 8)
+
+[node name="BL" type="TextureRect" parent="CanvasLayer/UI/InteractOutlineContainer/BottomLeft"]
+layout_mode = 0
+offset_top = -16.0
+offset_right = 16.0
+rotation = -1.5708
+pivot_offset = Vector2(8, 8)
+texture = ExtResource("5_h3h4f")
+
+[node name="TopRight" type="Control" parent="CanvasLayer/UI/InteractOutlineContainer"]
+anchors_preset = 0
+offset_right = 16.0
+offset_bottom = 16.0
+pivot_offset = Vector2(8, 8)
+
+[node name="TR" type="TextureRect" parent="CanvasLayer/UI/InteractOutlineContainer/TopRight"]
+layout_mode = 0
+offset_left = -16.0
+offset_bottom = 16.0
+rotation = 1.57079
+pivot_offset = Vector2(8, 8)
+texture = ExtResource("5_h3h4f")
+
+[node name="BottomRight" type="Control" parent="CanvasLayer/UI/InteractOutlineContainer"]
+anchors_preset = 0
+offset_right = 16.0
+offset_bottom = 16.0
+pivot_offset = Vector2(8, 8)
+
+[node name="BR" type="TextureRect" parent="CanvasLayer/UI/InteractOutlineContainer/BottomRight"]
+layout_mode = 0
+offset_left = -16.0
+offset_top = -16.0
+rotation = 3.14159
+pivot_offset = Vector2(8, 8)
+texture = ExtResource("5_h3h4f")
+
+[node name="HoverLabel" type="Control" parent="CanvasLayer/UI"]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Text" type="Label" parent="CanvasLayer/UI/HoverLabel"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -12.0
+offset_top = -35.0
+offset_right = 76.0
+offset_bottom = -9.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 8
+text = "Computer
+"
+uppercase = true
+
+[node name="ActionsContainer" type="HBoxContainer" parent="CanvasLayer/UI"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="InteractAction" type="HBoxContainer" parent="CanvasLayer/UI/ActionsContainer"]
+visible = false
+custom_minimum_size = Vector2(38, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 8
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/UI/ActionsContainer/InteractAction"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+texture = ExtResource("7_gl4s2")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/UI/ActionsContainer/InteractAction"]
+texture_filter = 1
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Interact"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="InterfaceAction" type="HBoxContainer" parent="CanvasLayer/UI/ActionsContainer"]
+visible = false
+custom_minimum_size = Vector2(38, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 8
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/UI/ActionsContainer/InterfaceAction"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+texture = ExtResource("9_kctl2")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/UI/ActionsContainer/InterfaceAction"]
+texture_filter = 1
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Use
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="CarryAction" type="HBoxContainer" parent="CanvasLayer/UI/ActionsContainer"]
+visible = false
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 8
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/UI/ActionsContainer/CarryAction"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+texture = ExtResource("9_kctl2")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/UI/ActionsContainer/CarryAction"]
+texture_filter = 1
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Carry"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="SayResponseAction" type="HBoxContainer" parent="CanvasLayer/UI/ActionsContainer"]
+visible = false
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 8
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/UI/ActionsContainer/SayResponseAction"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+texture = ExtResource("7_gl4s2")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/UI/ActionsContainer/SayResponseAction"]
+texture_filter = 1
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Pick"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="PutDownAction" type="HBoxContainer" parent="CanvasLayer/UI/ActionsContainer"]
+visible = false
+custom_minimum_size = Vector2(65, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 8
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/UI/ActionsContainer/PutDownAction"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+texture = ExtResource("7_gl4s2")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/UI/ActionsContainer/PutDownAction"]
+texture_filter = 1
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Put Down"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="ChooseResponseAction" type="HBoxContainer" parent="CanvasLayer/UI/ActionsContainer"]
+visible = false
+custom_minimum_size = Vector2(55, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 8
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/UI/ActionsContainer/ChooseResponseAction"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+texture = ExtResource("10_wi3c2")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/UI/ActionsContainer/ChooseResponseAction"]
+texture_filter = 1
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Scroll"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="HangUpAction" type="HBoxContainer" parent="CanvasLayer/UI/ActionsContainer"]
+visible = false
+custom_minimum_size = Vector2(38, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 8
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/UI/ActionsContainer/HangUpAction"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+texture = ExtResource("9_kctl2")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/UI/ActionsContainer/HangUpAction"]
+texture_filter = 1
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Hang Up"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="FlipPageAction" type="HBoxContainer" parent="CanvasLayer/UI/ActionsContainer"]
+visible = false
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 8
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/UI/ActionsContainer/FlipPageAction"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+texture = ExtResource("10_wi3c2")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/UI/ActionsContainer/FlipPageAction"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Flip Page"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="PhoneText" type="Label" parent="CanvasLayer/UI"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 55.0
+offset_bottom = 78.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Conversation" type="Control" parent="CanvasLayer/UI" groups=["conversation_container"]]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -240.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UI/Conversation"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 90.0
+offset_top = 34.0
+offset_right = -90.0
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Text" type="Label" parent="CanvasLayer/UI/Conversation"]
+visible = false
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 90.0
+offset_top = -86.0
+offset_right = -90.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "This is some example text which is really long, et cetera, et cetera, et cetera, et cetera, and again"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="PhoneAudio" type="AudioStreamPlayer" parent="CanvasLayer/UI/Conversation"]
+volume_db = 3.0
+max_polyphony = 30
+
+[node name="FadeIn" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+script = ExtResource("24_0pnd2")
+
+[node name="FootstepAudio" type="AudioStreamPlayer" parent="."]
+volume_db = -10.0
+max_polyphony = 5

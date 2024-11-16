@@ -1,0 +1,255 @@
+[gd_scene load_steps=12 format=3 uid="uid://dxyw80tj2xlgq"]
+
+[ext_resource type="Shader" path="res://assets/postprocessing/pp_band-dither.gdshader" id="1_gp0a4"]
+[ext_resource type="Script" path="res://assets/scenes/titlescreen/TitleScreen.cs" id="7_ph0uu"]
+[ext_resource type="Script" path="res://assets/scenes/titlescreen/Blink.cs" id="8_7nfky"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cb5fl"]
+shader = ExtResource("1_gp0a4")
+shader_parameter/color_depth = 5
+shader_parameter/dithering = true
+shader_parameter/resolution_scale = 1
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1uyvv"]
+sky_top_color = Color(0, 0, 0, 1)
+sky_horizon_color = Color(0.0941176, 0, 0.164706, 1)
+ground_bottom_color = Color(0, 0, 0, 1)
+ground_horizon_color = Color(0, 0, 0, 1)
+ground_curve = 0.285262
+sun_angle_max = 0.0
+sun_curve = 1e-05
+
+[sub_resource type="Sky" id="Sky_a1d4g"]
+sky_material = SubResource("ProceduralSkyMaterial_1uyvv")
+
+[sub_resource type="Environment" id="Environment_corof"]
+background_mode = 2
+sky = SubResource("Sky_a1d4g")
+ambient_light_source = 3
+ambient_light_color = Color(0.254902, 0.254902, 0.254902, 1)
+ambient_light_sky_contribution = 0.48
+ambient_light_energy = 0.2
+reflected_light_source = 1
+tonemap_mode = 2
+fog_enabled = true
+fog_light_color = Color(0, 0, 0, 1)
+fog_light_energy = 0.1
+fog_density = 0.02
+fog_height_density = 0.3
+volumetric_fog_density = 0.0353
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_k3563"]
+dof_blur_near_enabled = true
+dof_blur_near_distance = 5.0
+dof_blur_amount = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_8ilfu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jcb84"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ow7l4"]
+
+[node name="TitleScreen" type="Node"]
+script = ExtResource("7_ph0uu")
+
+[node name="PSXLayer" type="CanvasLayer" parent="."]
+
+[node name="Dithering" type="SubViewportContainer" parent="PSXLayer"]
+z_index = 1
+texture_filter = 1
+material = SubResource("ShaderMaterial_cb5fl")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="PSXLayer/Dithering"]
+handle_input_locally = false
+audio_listener_enable_3d = true
+canvas_cull_mask = 4294443007
+size = Vector2i(800, 600)
+render_target_update_mode = 4
+
+[node name="Node" type="Node" parent="PSXLayer/Dithering/SubViewport"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="PSXLayer/Dithering/SubViewport/Node"]
+environment = SubResource("Environment_corof")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="PSXLayer/Dithering/SubViewport/Node/WorldEnvironment"]
+transform = Transform3D(-0.0393975, 0.796727, -0.603054, 0.322608, 0.581345, 0.746969, 0.945712, -0.165122, -0.279934, 0, 9.47169, 0)
+visible = false
+light_energy = 0.05
+shadow_enabled = true
+shadow_normal_bias = 4.0
+shadow_reverse_cull_face = true
+shadow_blur = 0.0
+directional_shadow_mode = 1
+
+[node name="Camera3D" type="Camera3D" parent="PSXLayer/Dithering/SubViewport/Node" groups=["camera"]]
+transform = Transform3D(-0.325568, -0.0824074, 0.941921, 0, 0.996195, 0.0871557, -0.945519, 0.0283751, -0.324329, 0, 2.031, 0)
+attributes = SubResource("CameraAttributesPractical_k3563")
+fov = 25.0
+
+[node name="Node3D" type="Node3D" parent="PSXLayer/Dithering/SubViewport/Node"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.44, -0.11, -0.355)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PSXLayer/Dithering/SubViewport/Node/Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.66705, 1.06783, 3.29334)
+mesh = SubResource("BoxMesh_8ilfu")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="PSXLayer/Dithering/SubViewport/Node"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3442, 2.78482, 4.57457)
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="PSXLayer/Dithering/SubViewport/Node"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.17736, 3.61687, 0.0330846)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+custom_minimum_size = Vector2(0, 64)
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 32.0
+grow_horizontal = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="CanvasLayer"]
+custom_minimum_size = Vector2(0, 64)
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -32.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0, 0, 0, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 16
+
+[node name="Control" type="Control" parent="CanvasLayer/MarginContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MarginContainer/Control"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -8.0
+offset_right = 85.0
+offset_bottom = 8.0
+grow_vertical = 2
+theme_override_constants/separation = -6
+
+[node name="Title" type="Label" parent="CanvasLayer/MarginContainer/Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_jcb84")
+text = "WIP HORROR GAME TITLE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Caret" type="Label" parent="CanvasLayer/MarginContainer/Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ow7l4")
+text = "█"
+horizontal_alignment = 1
+visible_characters = 1
+visible_characters_behavior = 1
+script = ExtResource("8_7nfky")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer/Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -232.0
+offset_right = 72.0
+offset_bottom = -88.0
+grow_vertical = 0
+theme_override_constants/separation = 16
+
+[node name="Continue" type="Button" parent="CanvasLayer/MarginContainer/Control/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 5
+theme_override_colors/font_hover_color = Color(1, 0.501961, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_jcb84")
+disabled = true
+text = "Continue"
+alignment = 0
+
+[node name="New Game" type="Button" parent="CanvasLayer/MarginContainer/Control/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 5
+theme_override_colors/font_hover_color = Color(1, 0.501961, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_jcb84")
+text = "New Game"
+alignment = 0
+
+[node name="Options" type="Button" parent="CanvasLayer/MarginContainer/Control/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 5
+theme_override_colors/font_hover_color = Color(1, 0.501961, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_jcb84")
+disabled = true
+text = "Options"
+alignment = 0
+
+[node name="Credits" type="Button" parent="CanvasLayer/MarginContainer/Control/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 5
+theme_override_colors/font_hover_color = Color(1, 0.501961, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_jcb84")
+disabled = true
+text = "Credits"
+alignment = 0
+
+[node name="Exit" type="Button" parent="CanvasLayer/MarginContainer/Control/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 5
+theme_override_colors/font_hover_color = Color(1, 0.501961, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_jcb84")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_jcb84")
+text = "Exit"
+alignment = 0

@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://bj0g4vimjl74m"]
+
+[ext_resource type="PackedScene" uid="uid://dlnqpi03ior6v" path="res://assets/scenes/computer/model/vt220-screen.glb" id="1_hb8nl"]
+[ext_resource type="Script" path="res://assets/scenes/computer/ComputerModel.cs" id="2_12mw8"]
+[ext_resource type="Material" uid="uid://g5tlg1n1dusx" path="res://assets/scenes/computer/materials/ComputerScreenMaterial.tres" id="3_qubar"]
+[ext_resource type="Shader" path="res://assets/shaders/psx_lit_viewport.gdshader" id="4_xmntm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5wjws"]
+render_priority = 0
+shader = ExtResource("4_xmntm")
+shader_parameter/precision_multiplier = 0.75
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1.5)
+shader_parameter/uv_offset = Vector2(0, 0.75)
+shader_parameter/uv_pan_velocity = Vector2(0, 0)
+shader_parameter/uv_pivot = Vector2(0, 0)
+shader_parameter/uv_rotation = 0.0
+shader_parameter/affine_mapping = false
+shader_parameter/saturation = 1.0
+shader_parameter/brightness = 1.0
+shader_parameter/contrast = 1.0
+
+[node name="VT220Screen" instance=ExtResource("1_hb8nl")]
+script = ExtResource("2_12mw8")
+
+[node name="Screen" parent="." index="0"]
+surface_material_override/0 = ExtResource("3_qubar")
+surface_material_override/1 = SubResource("ShaderMaterial_5wjws")

@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://cxnh1crhlsbmb"]
+
+[ext_resource type="Script" path="res://assets/scenes/computer/screen/TerminalPrompt.cs" id="1_v7ed4"]
+[ext_resource type="Theme" uid="uid://b8t2rlxll6leb" path="res://assets/scenes/computer/screen/TerminalLineTheme.tres" id="2_870o6"]
+
+[node name="TerminalPrompt" type="HBoxContainer"]
+script = ExtResource("1_v7ed4")
+
+[node name="Prefix" type="Label" parent="."]
+layout_mode = 2
+size_flags_vertical = 1
+theme = ExtResource("2_870o6")
+text = ">"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="."]
+layout_mode = 2
+theme = ExtResource("2_870o6")
+expand_to_text_length = true
+context_menu_enabled = false
+shortcut_keys_enabled = false
+middle_mouse_paste_enabled = false
+selecting_enabled = false
+deselect_on_focus_loss_enabled = false
+draw_control_chars = true
+caret_blink = true
+caret_force_displayed = true

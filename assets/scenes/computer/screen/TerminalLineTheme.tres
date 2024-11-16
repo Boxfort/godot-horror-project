@@ -1,0 +1,22 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://b8t2rlxll6leb"]
+
+[ext_resource type="FontFile" uid="uid://4q8ot8loojfe" path="res://assets/fonts/MorePerfectDOSVGA.ttf" id="1_62oq0"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bxgvi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0h7oq"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iiq88"]
+
+[resource]
+default_font = ExtResource("1_62oq0")
+default_font_size = 24
+Label/colors/font_color = Color(1, 0.501961, 0, 1)
+Label/fonts/font = ExtResource("1_62oq0")
+LineEdit/colors/caret_color = Color(1, 0.501961, 0, 1)
+LineEdit/colors/font_color = Color(1, 0.501961, 0, 1)
+LineEdit/constants/caret_width = 8
+LineEdit/fonts/font = ExtResource("1_62oq0")
+LineEdit/styles/focus = SubResource("StyleBoxEmpty_bxgvi")
+LineEdit/styles/normal = SubResource("StyleBoxEmpty_0h7oq")
+LineEdit/styles/read_only = SubResource("StyleBoxEmpty_iiq88")

@@ -1,0 +1,252 @@
+[gd_scene load_steps=17 format=3 uid="uid://0f07328k3ef5"]
+
+[ext_resource type="Script" path="res://assets/scenes/computer/ScreenCanvas.cs" id="1_12tx7"]
+[ext_resource type="PackedScene" path="res://Assets/Scenes/Computer/MailProgram.tscn" id="2_kx328"]
+[ext_resource type="PackedScene" path="res://Assets/Scenes/Computer/Programs/Terminal/TerminalNonEmbed.tscn" id="2_om1ck"]
+[ext_resource type="Script" path="res://Assets/Scenes/Computer/Programs/GUI/Pointer.cs" id="4_6c1qa"]
+[ext_resource type="Script" path="res://Assets/Scenes/Computer/Programs/Terminal/BootScreen.cs" id="9_3e5nv"]
+[ext_resource type="Theme" path="res://Assets/Scenes/Computer/Programs/Terminal/TerminalLineTheme.tres" id="9_mfq6q"]
+[ext_resource type="AudioStream" path="res://Assets/Scenes/Computer/Audio/beep_code.wav" id="11_2k08g"]
+[ext_resource type="AudioStream" path="res://Assets/Scenes/Computer/Audio/keyboard_press_1.wav" id="12_lt42k"]
+[ext_resource type="AudioStream" path="res://Assets/Scenes/Computer/Audio/keyboard_press_space.wav" id="13_jjyou"]
+[ext_resource type="AudioStream" path="res://Assets/Scenes/Computer/Audio/mouse_click.wav" id="14_xchqw"]
+[ext_resource type="Texture2D" path="res://Assets/Scenes/Computer/Interface/cursor.png" id="15_rqbvg"]
+[ext_resource type="Texture2D" path="res://Assets/Scenes/Computer/Interface/cursor_hand_alt.png" id="16_nyf8k"]
+[ext_resource type="Texture2D" path="res://Assets/Scenes/Computer/Interface/cursor_loading.png" id="17_4qqhx"]
+[ext_resource type="Texture2D" path="res://Assets/Scenes/Computer/Interface/cursor_ibeam.png" id="18_oetva"]
+[ext_resource type="Shader" path="res://assets/shaders/crt.gdshader" id="24_kq2pv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ova1"]
+shader = ExtResource("24_kq2pv")
+shader_parameter/uv_zoom = 1.1
+shader_parameter/uv_curve_x = 5.485
+shader_parameter/uv_curve_y = 6.837
+shader_parameter/uv_curve_offset = 0.048
+shader_parameter/uv_curve_mult = 0.9
+shader_parameter/opacity = 0.25
+
+[node name="ScreenCanvas" type="CanvasLayer"]
+scale = Vector2(0.89, 1)
+transform = Transform2D(0.89, 0, 0, 1, 0, 0)
+script = ExtResource("1_12tx7")
+mailProgramScene = ExtResource("2_kx328")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(900, 600)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(900, 600)
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 16
+
+[node name="Bounds" type="Control" parent="MarginContainer"]
+texture_filter = 1
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Terminal" parent="MarginContainer/Bounds" groups=["terminal"] instance=ExtResource("2_om1ck")]
+layout_mode = 1
+
+[node name="ProgramContainer" type="Control" parent="MarginContainer/Bounds"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Pointer" type="Control" parent="MarginContainer/Bounds" groups=["pointer"]]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 180.0
+offset_top = -20.0
+offset_right = 196.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("4_6c1qa")
+arrowTexture = ExtResource("15_rqbvg")
+handTexture = ExtResource("16_nyf8k")
+loadingTexture = ExtResource("17_4qqhx")
+ibeamTexture = ExtResource("18_oetva")
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/Bounds/Pointer"]
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+texture = ExtResource("15_rqbvg")
+stretch_mode = 2
+
+[node name="CRTShader" type="ColorRect" parent="MarginContainer/Bounds"]
+material = SubResource("ShaderMaterial_6ova1")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="BootScreen" type="Control" parent="MarginContainer/Bounds"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("9_3e5nv")
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/Bounds/BootScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Wait" type="Label" parent="MarginContainer/Bounds/BootScreen/ColorRect"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 72.0
+offset_bottom = 40.0
+theme = ExtResource("9_mfq6q")
+text = "Wait
+"
+
+[node name="Control" type="Control" parent="MarginContainer/Bounds/BootScreen/ColorRect"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="MarginContainer/Bounds/BootScreen/ColorRect/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -98.0
+offset_top = -84.0
+offset_right = 98.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("9_mfq6q")
+theme_override_constants/line_spacing = 0
+text = "┌────────────┐
+│  VT220 OK  │
+└────────────┘"
+
+[node name="Label2" type="Label" parent="MarginContainer/Bounds/BootScreen/ColorRect/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -294.0
+offset_top = 44.0
+offset_right = 294.0
+offset_bottom = 68.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("9_mfq6q")
+theme_override_constants/line_spacing = 0
+text = "Firmware and Set-Up Screens Copyright 1983
+"
+
+[node name="Label3" type="Label" parent="MarginContainer/Bounds/BootScreen/ColorRect/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -203.0
+offset_top = 84.0
+offset_right = 203.0
+offset_bottom = 108.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("9_mfq6q")
+theme_override_constants/line_spacing = 0
+text = "Digital Equipment Corporation"
+
+[node name="BeepCodeAudio" type="AudioStreamPlayer3D" parent="MarginContainer/Bounds/BootScreen"]
+stream = ExtResource("11_2k08g")
+max_db = 1.0
+
+[node name="Debug" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Red" type="ColorRect" parent="Debug"]
+layout_mode = 1
+offset_right = 32.0
+offset_bottom = 32.0
+color = Color(1, 0, 0, 1)
+
+[node name="Green" type="ColorRect" parent="Debug"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -32.0
+offset_right = 32.0
+grow_vertical = 0
+color = Color(0, 1, 0, 1)
+
+[node name="Blue" type="ColorRect" parent="Debug"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -32.0
+grow_horizontal = 0
+grow_vertical = 0
+color = Color(0, 0, 1, 1)
+
+[node name="TypingAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("12_lt42k")
+max_polyphony = 10
+
+[node name="TypingAudioBig" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_jjyou")
+max_polyphony = 10
+
+[node name="ClickingAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("14_xchqw")
+volume_db = 5.0
+max_polyphony = 10

@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=3 uid="uid://q2hfo0t7yqjv"]
+
+[ext_resource type="PackedScene" uid="uid://ceanolwofwqvh" path="res://assets/scenes/computer/Computer.tscn" id="1_3liej"]
+[ext_resource type="PackedScene" uid="uid://dltlx5ruk6pwh" path="res://assets/scenes/player/PlayerController.tscn" id="2_houyb"]
+[ext_resource type="PackedScene" uid="uid://31jqbtlbjda7" path="res://assets/scenes/room/model/room.glb" id="3_bi267"]
+[ext_resource type="PackedScene" uid="uid://c2ne5mbox56hb" path="res://assets/scenes/computer/VT220Keyboard.tscn" id="4_s5whu"]
+[ext_resource type="PackedScene" uid="uid://82isst5s57w7" path="res://assets/scenes/computer/VT220Computer.tscn" id="5_aioxs"]
+
+[sub_resource type="Environment" id="Environment_i2sym"]
+background_energy_multiplier = 0.1
+ambient_light_energy = 0.1
+tonemap_mode = 2
+ssao_enabled = true
+
+[node name="Room" type="Node3D"]
+
+[node name="Computer" parent="." instance=ExtResource("1_3liej")]
+transform = Transform3D(0.69282, 0, 0.4, 0, 0.8, 0, -0.4, 0, 0.69282, -2.2789, 1.66339, -0.687671)
+
+[node name="VT220Keyboard" parent="." instance=ExtResource("4_s5whu")]
+transform = Transform3D(-0.0168364, 0, 0.0782083, 0, 0.08, 0, -0.0782083, 0, -0.0168364, -2.03247, 1.2, -0.867481)
+
+[node name="VT220Computer" parent="." instance=ExtResource("5_aioxs")]
+transform = Transform3D(-0.011735, 0, 0.0791346, 0, 0.08, 0, -0.0791346, 0, -0.011735, -2.24857, 1.2, -0.61761)
+
+[node name="PlayerController" parent="." instance=ExtResource("2_houyb")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.95312, 1.99745, 2.06138)
+
+[node name="room" parent="." instance=ExtResource("3_bi267")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_i2sym")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(0.552563, 0.589353, -0.589353, 0, 0.707107, 0.707107, 0.833471, -0.390721, 0.390721, 0, 6.69319, 0)
+visible = false
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.07741, 2.57928, -1.29257)
+light_energy = 0.05

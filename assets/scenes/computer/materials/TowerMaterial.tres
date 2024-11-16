@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://bgfkjaihoyr4c"]
+
+[ext_resource type="Shader" path="res://Assets/Shaders/psx_lit.gdshader" id="1_jfr17"]
+[ext_resource type="Texture2D" uid="uid://dfe4msa0sb68n" path="res://Assets/Scenes/Computer/Model/Computer_tower.png" id="2_i25i5"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_jfr17")
+shader_parameter/precision_multiplier = 0.75
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/uv_pan_velocity = Vector2(0, 0)
+shader_parameter/flash = false
+shader_parameter/affine_mapping = false
+shader_parameter/albedoTex = ExtResource("2_i25i5")

@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://ceanolwofwqvh"]
+
+[ext_resource type="Script" path="res://assets/scenes/computer/ComputerController.cs" id="1_iedk5"]
+[ext_resource type="PackedScene" uid="uid://bj0g4vimjl74m" path="res://assets/scenes/computer/VT220Screen.tscn" id="3_o80yj"]
+[ext_resource type="PackedScene" uid="uid://b556n2816hum4" path="res://assets/scenes/computer/ScreenCanvasTerminal.tscn" id="17_ft2yb"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3m7wb"]
+size = Vector3(0.813721, 0.641968, 0.759155)
+
+[node name="Computer" type="CharacterBody3D" groups=["computer"]]
+collision_layer = 3
+script = ExtResource("1_iedk5")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+canvas_item_default_texture_filter = 0
+gui_disable_input = true
+gui_embed_subwindows = true
+size = Vector2i(800, 600)
+render_target_update_mode = 3
+
+[node name="ScreenCanvas" parent="SubViewport" instance=ExtResource("17_ft2yb")]
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+volume_db = -25.0
+unit_size = 7.5
+max_db = -15.0
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.917217, 0.0992186, 0)
+light_color = Color(1, 0.670777, 0.459056, 1)
+light_energy = 0.1
+light_cull_mask = 4294965791
+shadow_enabled = true
+omni_range = 4.0
+omni_attenuation = 2.07053
+
+[node name="VT220Model" parent="." node_paths=PackedStringArray("screenViewport") instance=ExtResource("3_o80yj")]
+transform = Transform3D(-4.37114e-09, 0, 0.1, 0, 0.1, 0, -0.1, 0, -4.37114e-09, 0, 0, 0)
+screenViewport = NodePath("../SubViewport")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.396606, 0.0504761, 0.00213623)
+shape = SubResource("BoxShape3D_3m7wb")
