@@ -10,6 +10,8 @@ internal class PlayerUsingPhoneState : State<PlayerState, PlayerController>
     bool entering = false;
     bool phonePickedUp = false;
 
+    RotaryPhoneHole heldPhoneKey;
+
     public override void Enter(PlayerController node)
     {
         if (node.interactingWith != null)
@@ -34,7 +36,7 @@ internal class PlayerUsingPhoneState : State<PlayerState, PlayerController>
         node.interactingWith = null;
         exiting = false;
         phonePickedUp = false;
-        node.handset.Hide();
+        //node.handset.Hide();
     }
 
     public override PlayerState Update(PlayerController node, double delta)
@@ -51,7 +53,7 @@ internal class PlayerUsingPhoneState : State<PlayerState, PlayerController>
             return PlayerState.Moving;
         }
 
-        PhoneController phone = null;//node.interactingWith as PhoneController; TODO: fix
+        PhoneController phone = node.interactingWith as PhoneController;
 
         // Exiting
         if (!exiting && !entering && Input.IsActionJustPressed("fire2"))
@@ -84,14 +86,28 @@ internal class PlayerUsingPhoneState : State<PlayerState, PlayerController>
 
         if (Input.IsActionJustPressed("fire"))
         {
-            node.interactionController.TryInteract();
+            Interactable interactable = node.interactionController.TryInteract();
+
+            if (interactable is RotaryPhoneHole key) 
+            {
+                heldPhoneKey = key;
+            }
+        }
+
+        if (heldPhoneKey != null) {
+            phone.IncomingRay(node.GetHeadPosition(), node.GetLookDirection());
+        }
+
+        if (!Input.IsActionPressed("fire") && heldPhoneKey != null) {
+            heldPhoneKey.StopInteract();
+            heldPhoneKey = null;
         }
 
         return PlayerState.None;
     }
 
-    public Vector3 interactOffset => new Vector3(0.5f, 0.1f, 0);
-    public Vector3 stopInteractOffset => new Vector3(0.5f, 0.1f, 0);
+    public Vector3 interactOffset => new Vector3(5f, 0.5f, 0);
+    public Vector3 stopInteractOffset => new Vector3(2.0f, 0.5f, 0);
 
 
     private void HandleEntering(PlayerController node, double delta)

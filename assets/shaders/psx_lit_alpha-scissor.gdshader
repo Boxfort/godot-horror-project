@@ -41,7 +41,7 @@ void vertex()
 	}
 
 	POSITION = get_snapped_pos(PROJECTION_MATRIX * MODELVIEW_MATRIX * vec4(VERTEX, 1.0));  // snap position to grid
-    
+
     if (affine_mapping) {
 	   POSITION /= abs(POSITION.w);  // discard depth for affine mapping
     }
@@ -62,7 +62,7 @@ void fragment()
 	ALPHA = tex.a;
     ALBEDO = tex.rgb;
 	ALPHA_SCISSOR_THRESHOLD = alpha_scissor;
-    
+
     if (flash) {
         EMISSION = vec3(0.05,0.05,0.05);
     }

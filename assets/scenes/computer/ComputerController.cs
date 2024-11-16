@@ -53,7 +53,6 @@ public partial class ComputerController : Interactable
 
     public void OnBeginInteracting()
     {
-        GD.Print("WE DO BE INTERACTING");
         isInteracting = true;
         screenCanvas.IsInteracting = true;
         screenViewport.GuiDisableInput = false;

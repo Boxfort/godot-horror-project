@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://064rw1b5enj0"]
+
+[ext_resource type="PackedScene" uid="uid://e8llistmpkqy" path="res://assets/scenes/phone/model/Phone.glb" id="1_5u3l6"]
+[ext_resource type="Material" uid="uid://b0h0ywcyyh1eg" path="res://assets/scenes/phone/materials/PhoneBodyMaterial.tres" id="2_5055p"]
+[ext_resource type="Material" uid="uid://cgoh6u35wkps5" path="res://assets/scenes/phone/materials/PhoneMaterial.tres" id="3_rd4fa"]
+[ext_resource type="Script" path="res://assets/scenes/phone/RotaryPhoneHole.cs" id="4_eote3"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_vppia"]
+radius = 0.176886
+
+[node name="PhoneModel" instance=ExtResource("1_5u3l6")]
+
+[node name="Phone" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_5055p")
+
+[node name="Handset" parent="." index="1"]
+surface_material_override/0 = ExtResource("2_5055p")
+
+[node name="Dots" parent="Empty" index="0"]
+surface_material_override/0 = ExtResource("3_rd4fa")
+
+[node name="FingerHoles" parent="Empty" index="1"]
+surface_material_override/0 = ExtResource("3_rd4fa")
+
+[node name="Interact-0" type="CharacterBody3D" parent="Empty/FingerHoles" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.431787, 0.175783, -0.543337)
+motion_mode = 1
+script = ExtResource("4_eote3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Empty/FingerHoles/Interact-0" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0707518, -0.173792, 0)
+shape = SubResource("SphereShape3D_vppia")
+
+[node name="NumbersAndLetters" parent="Empty" index="2"]
+surface_material_override/0 = ExtResource("3_rd4fa")
+
+[node name="Stopper" parent="Empty" index="3"]
+surface_material_override/0 = ExtResource("3_rd4fa")

@@ -28,7 +28,6 @@ internal class PlayerMovingState : State<PlayerState, PlayerController>
 
             if (interactable != null)
             {
-
                 if (interactable is ComputerController)
                 {
                     node.interactingWith = interactable;
@@ -38,7 +37,7 @@ internal class PlayerMovingState : State<PlayerState, PlayerController>
                 {
                     node.interactingWith = interactable;
                     return PlayerState.UsingPhone;
-                }
+                } 
             }
         }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Godot;
 
-public partial class PhoneController : Interfaceable
+public partial class PhoneController : Interactable
 {
     [Signal]
     public delegate void OnPhoneKeyPressedEventHandler(String dialedNumber);
@@ -22,14 +22,15 @@ public partial class PhoneController : Interfaceable
 
     readonly Random rng = new();
 
-    public override Vector3 InteractOffset => new Vector3(0.5f, 0.1f, 0);
-    public override Vector3 StopInteractOffset => new Vector3(0.5f, 0.1f, 0);
-
-    public override bool LookAtOnInteract => true;
+    //public override Vector3 InteractOffset => new Vector3(0.5f, 0.1f, 0);
+    //public override Vector3 StopInteractOffset => new Vector3(0.5f, 0.1f, 0);
 
     public override string HoverString => "Phone";
 
+    public override string InteractString => "Use";
+
     Node3D handsetModel;
+    Node3D fingerHoles;
 
     AudioStreamPlayer dialToneAudio;
     AudioStreamPlayer disconnectedToneAudio;
@@ -53,10 +54,21 @@ public partial class PhoneController : Interfaceable
     Conversation incomingConversation;
     bool isRinging = false;
 
+    bool isTurning = false;
+
     public override void _Ready()
     {
         //numberManager = (PhoneNumberManager)GetTree().GetFirstNodeInGroup("number_manager");
         //networkManager = (NetworkManager)GetTree().GetFirstNodeInGroup("network_manager");
+
+        fingerHoles = GetNode<Node3D>("PhoneModel/Empty/FingerHoles");
+
+        foreach(Node n in fingerHoles.GetChildren()) {
+            if (n is RotaryPhoneHole r) {
+                r.OnBeginInteraction += () => OnBeginTurning(r);
+                r.OnEndInteraction += () => OnEndTurning(r);
+            }
+        }
 
         handsetModel = GetNode<Node3D>("Phone/Handset");
         dialToneAudio = GetNode<AudioStreamPlayer>("DialToneAudio");
@@ -71,63 +83,64 @@ public partial class PhoneController : Interfaceable
 
     public override void _Process(double delta)
     {
-        if (!isDialing)
-            return;
+        // no-op
+    }
+    
+    
+    public void IncomingRay(Vector3 from, Vector3 direction) 
+    {
+        if (isTurning) {
+            Vector3? point = IntersectPoint(
+                fingerHoles.GlobalPosition,
+                fingerHoles.GlobalTransform.Basis.Y,
+                from,
+                direction
+            );
 
-        String keyPressed = null;
+            if (point != null) {
+                GetNode<Node3D>("Debug").GlobalPosition = point.Value;
+            }
+            //GD.Print(point);
+        }
+    }
+        
+    
+    public void OnBeginTurning(RotaryPhoneHole key) {
+        GD.Print("Turning");
+        isTurning = true;
+    }
 
-        if (Input.IsActionJustPressed("1"))
-        {
-            keyPressed = "1";
-        }
-        else if (Input.IsActionJustPressed("2"))
-        {
-            keyPressed = "2";
-        }
-        else if (Input.IsActionJustPressed("3"))
-        {
-            keyPressed = "3";
-        }
-        else if (Input.IsActionJustPressed("4"))
-        {
-            keyPressed = "4";
-        }
-        else if (Input.IsActionJustPressed("5"))
-        {
-            keyPressed = "5";
-        }
-        else if (Input.IsActionJustPressed("6"))
-        {
-            keyPressed = "6";
-        }
-        else if (Input.IsActionJustPressed("7"))
-        {
-            keyPressed = "7";
-        }
-        else if (Input.IsActionJustPressed("8"))
-        {
-            keyPressed = "8";
-        }
-        else if (Input.IsActionJustPressed("9"))
-        {
-            keyPressed = "9";
-        }
-        else if (Input.IsActionJustPressed("0"))
-        {
-            keyPressed = "0";
-        }
-        else if (Input.IsActionJustPressed("*"))
-        {
-            keyPressed = "*";
-        }
-        else if (Input.IsActionJustPressed("#"))
-        {
-            keyPressed = "#";
-        }
+    public void OnEndTurning(RotaryPhoneHole key) {
+        GD.Print("Not Turning");
+        isTurning = false;
+        // disable all buttons
+        // rotate back to the beginning at a fix rate
+        // re-enable buttons
+    }
 
-        if (keyPressed != null)
+
+    Vector3? IntersectPoint(
+        Vector3 planePosition,
+        Vector3 planeNormal,
+        Vector3 rayOrigin,
+        Vector3 rayDirection
+    )
+    {
+        //Math from http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection
+
+        float denominator = rayDirection.Dot(planeNormal);
+
+        if (denominator > 0.00001f)
         {
-            //GetNode<PhoneKey>(keyPressed).Interact();
+            //The distance to the plane
+            float t = (planePosition - rayOrigin).Dot(planeNormal) / denominator;
+
+            //Where the ray intersects with a plane
+            return rayOrigin + rayDirection * t;
+        }
+        else
+        {
+            return null;
         }
     }
 
@@ -281,5 +294,10 @@ public partial class PhoneController : Interfaceable
         }
 
         return formattedString;
+    }
+
+    public override void Interact()
+    {
+        GD.Print("Interacted with phone");
     }
 }

@@ -1,0 +1,18 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://cgoh6u35wkps5"]
+
+[ext_resource type="Shader" path="res://assets/shaders/psx_lit_alpha-scissor.gdshader" id="1_32hco"]
+[ext_resource type="Texture2D" uid="uid://tk7u70ly6lv" path="res://assets/scenes/phone/model/Phone_PhoneTexture.png" id="2_66hu6"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_32hco")
+shader_parameter/precision_multiplier = 1.0
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/billboard = false
+shader_parameter/y_billboard = false
+shader_parameter/alpha_scissor = 0.1
+shader_parameter/flash = false
+shader_parameter/affine_mapping = false
+shader_parameter/albedoTex = ExtResource("2_66hu6")

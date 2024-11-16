@@ -1,10 +1,19 @@
-[gd_scene load_steps=7 format=3 uid="uid://q2hfo0t7yqjv"]
+[gd_scene load_steps=11 format=3 uid="uid://q2hfo0t7yqjv"]
 
+[ext_resource type="Shader" path="res://assets/postprocessing/pp_band-dither.gdshader" id="1_1rspr"]
 [ext_resource type="PackedScene" uid="uid://ceanolwofwqvh" path="res://assets/scenes/computer/Computer.tscn" id="1_3liej"]
 [ext_resource type="PackedScene" uid="uid://dltlx5ruk6pwh" path="res://assets/scenes/player/PlayerController.tscn" id="2_houyb"]
 [ext_resource type="PackedScene" uid="uid://31jqbtlbjda7" path="res://assets/scenes/room/model/room.glb" id="3_bi267"]
 [ext_resource type="PackedScene" uid="uid://c2ne5mbox56hb" path="res://assets/scenes/computer/VT220Keyboard.tscn" id="4_s5whu"]
 [ext_resource type="PackedScene" uid="uid://82isst5s57w7" path="res://assets/scenes/computer/VT220Computer.tscn" id="5_aioxs"]
+[ext_resource type="PackedScene" uid="uid://brk48mkye6u1m" path="res://assets/scenes/phone/Phone.tscn" id="6_04r3t"]
+[ext_resource type="PackedScene" uid="uid://bbo2flkia21d7" path="res://assets/scenes/stool/StoolModel.tscn" id="8_76hxd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xl6o6"]
+shader = ExtResource("1_1rspr")
+shader_parameter/color_depth = 4
+shader_parameter/dithering = true
+shader_parameter/resolution_scale = 1
 
 [sub_resource type="Environment" id="Environment_i2sym"]
 background_energy_multiplier = 0.1
@@ -12,30 +21,55 @@ ambient_light_energy = 0.1
 tonemap_mode = 2
 ssao_enabled = true
 
-[node name="Room" type="Node3D"]
+[node name="GameScene" type="Node"]
 
-[node name="Computer" parent="." instance=ExtResource("1_3liej")]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Dithering" type="SubViewportContainer" parent="CanvasLayer"]
+z_index = 1
+material = SubResource("ShaderMaterial_xl6o6")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="CanvasLayer/Dithering"]
+handle_input_locally = false
+audio_listener_enable_3d = true
+size = Vector2i(800, 600)
+render_target_update_mode = 4
+
+[node name="Room" type="Node3D" parent="CanvasLayer/Dithering/SubViewport"]
+
+[node name="Computer" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("1_3liej")]
 transform = Transform3D(0.69282, 0, 0.4, 0, 0.8, 0, -0.4, 0, 0.69282, -2.2789, 1.66339, -0.687671)
 
-[node name="VT220Keyboard" parent="." instance=ExtResource("4_s5whu")]
+[node name="VT220Keyboard" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("4_s5whu")]
 transform = Transform3D(-0.0168364, 0, 0.0782083, 0, 0.08, 0, -0.0782083, 0, -0.0168364, -2.03247, 1.2, -0.867481)
 
-[node name="VT220Computer" parent="." instance=ExtResource("5_aioxs")]
+[node name="VT220Computer" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("5_aioxs")]
 transform = Transform3D(-0.011735, 0, 0.0791346, 0, 0.08, 0, -0.0791346, 0, -0.011735, -2.24857, 1.2, -0.61761)
 
-[node name="PlayerController" parent="." instance=ExtResource("2_houyb")]
+[node name="PlayerController" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("2_houyb")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.95312, 1.99745, 2.06138)
 
-[node name="room" parent="." instance=ExtResource("3_bi267")]
+[node name="room" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("3_bi267")]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="CanvasLayer/Dithering/SubViewport/Room"]
 environment = SubResource("Environment_i2sym")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="CanvasLayer/Dithering/SubViewport/Room/WorldEnvironment"]
 transform = Transform3D(0.552563, 0.589353, -0.589353, 0, 0.707107, 0.707107, 0.833471, -0.390721, 0.390721, 0, 6.69319, 0)
 visible = false
 
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
+[node name="OmniLight3D" type="OmniLight3D" parent="CanvasLayer/Dithering/SubViewport/Room"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.07741, 2.57928, -1.29257)
 light_energy = 0.05
+
+[node name="Phone" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("6_04r3t")]
+transform = Transform3D(0.0934652, 0, -0.0355564, 0, 0.1, 0, 0.0355564, 0, 0.0934652, -2.35175, 1.26119, -2.0096)
+
+[node name="Stool" parent="." instance=ExtResource("8_76hxd")]
+transform = Transform3D(0.280446, 0, 0.106537, 0, 0.3, 0, -0.106537, 0, 0.280446, -1.29448, 2.38419e-08, -1.42057)

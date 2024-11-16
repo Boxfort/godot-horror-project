@@ -1,0 +1,37 @@
+[gd_scene load_steps=7 format=3 uid="uid://brk48mkye6u1m"]
+
+[ext_resource type="PackedScene" uid="uid://064rw1b5enj0" path="res://assets/scenes/phone/PhoneModel.tscn" id="1_2ayy8"]
+[ext_resource type="Script" path="res://assets/scenes/phone/PhoneController.cs" id="1_vronx"]
+[ext_resource type="Shader" path="res://assets/shaders/psx_lit.gdshader" id="3_0rw37"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ajjxk"]
+size = Vector3(4.3904, 2.36475, 3.08362)
+
+[sub_resource type="SphereMesh" id="SphereMesh_caal2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_efv66"]
+render_priority = 0
+shader = ExtResource("3_0rw37")
+shader_parameter/precision_multiplier = 0.75
+shader_parameter/modulate_color = Color(1, 0, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/uv_pan_velocity = Vector2(0, 0)
+shader_parameter/flash = false
+shader_parameter/affine_mapping = false
+
+[node name="Phone" type="CharacterBody3D"]
+script = ExtResource("1_vronx")
+
+[node name="PhoneModel" parent="." instance=ExtResource("1_2ayy8")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.42527, 0.456787, -0.013855)
+shape = SubResource("BoxShape3D_ajjxk")
+
+[node name="TurnHoles" type="Node3D" parent="."]
+
+[node name="Debug" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.233924, 0, 0, 0, 0.233924, 0, 0, 0, 0.233924, 0, 4.34228, 0)
+mesh = SubResource("SphereMesh_caal2")
+surface_material_override/0 = SubResource("ShaderMaterial_efv66")
