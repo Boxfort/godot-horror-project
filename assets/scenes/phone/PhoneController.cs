@@ -6,7 +6,7 @@ using Godot;
 public partial class PhoneController : Interactable
 {
     [Signal]
-    public delegate void OnPhoneKeyPressedEventHandler(String dialedNumber);
+    public delegate void OnPhoneKeyDialedEventHandler(String dialedNumber);
 
     [Signal]
     public delegate void OnPhoneHangUpEventHandler();
@@ -22,11 +22,7 @@ public partial class PhoneController : Interactable
 
     readonly Random rng = new();
 
-    //public override Vector3 InteractOffset => new Vector3(0.5f, 0.1f, 0);
-    //public override Vector3 StopInteractOffset => new Vector3(0.5f, 0.1f, 0);
-
     public override string HoverString => "Phone";
-
     public override string InteractString => "Use";
 
     Node3D handsetModel;
@@ -45,7 +41,6 @@ public partial class PhoneController : Interactable
     AudioStreamPlayer3D hangUpAudio;
     AudioStreamPlayer otherHangUpAudio;
     AudioStreamPlayer notFoundAudio;
-    AudioStreamPlayer modemAudio;
 
     List<String> currentSequence = new();
 
@@ -80,7 +75,7 @@ public partial class PhoneController : Interactable
         rotaryClickAudio = GetNode<AudioStreamPlayer3D>("RotaryClickAudio");
         rotaryWindingAudio = GetNode<AudioStreamPlayer3D>("RotaryWindingAudio");
 
-        handsetModel = GetNode<Node3D>("Phone/Handset");
+        handsetModel = GetNode<Node3D>("PhoneHandset");
         dialToneAudio = GetNode<AudioStreamPlayer>("DialToneAudio");
         disconnectedToneAudio = GetNode<AudioStreamPlayer>("DisconnectedToneAudio");
         ringToneAudio = GetNode<AudioStreamPlayer>("RingToneAudio");
@@ -88,14 +83,12 @@ public partial class PhoneController : Interactable
         otherHangUpAudio = GetNode<AudioStreamPlayer>("OtherHangUpAudio");
         notFoundAudio = GetNode<AudioStreamPlayer>("NotFoundAudio");
         ringAudio = GetNode<AudioStreamPlayer3D>("RingAudio");
-        modemAudio = GetNode<AudioStreamPlayer>("ModemAudio");
     }
 
 
     float desiredRotation = 0;
     bool hasHitEnd = false;
     bool lastRotWasClockwise = false;
-
     float lastRotaryWindingAudioPos = 0;
 
     public override void _Process(double delta)
@@ -164,9 +157,15 @@ public partial class PhoneController : Interactable
                 var deg = Mathf.RadToDeg(Mathf.Atan2(offset.X, offset.Z)) + 180;
                 var rotationOffset = 360 - heldKeyAngle;
                 desiredRotation = -360 + rotationOffset + deg;
-                //GD.Print("deg: " + deg);
-                //GD.Print("desired: " + desiredRotation);
-                //GD.Print("heldangle: " + heldKeyAngle);
+            }
+        }
+    }
+
+    private void SetKeysInteractionEnabled(bool isEnabled) {
+        foreach(Node n in fingerHoles.GetChildren()) {
+            if (n is RotaryPhoneHole r) {
+                r.CanInteract = isEnabled;
+                r.HoverEnabled = isEnabled;
             }
         }
     }
@@ -185,6 +184,7 @@ public partial class PhoneController : Interactable
             rotaryClickAudio.PitchScale = 0.9f;
             rotaryClickAudio.Play();
             rotaryWindingAudio.Stop();
+            SetKeysInteractionEnabled(true);
         }
     }
         
@@ -193,19 +193,17 @@ public partial class PhoneController : Interactable
         isTurning = true;
         heldKey = key;
         heldKeyAngle = Mathf.RadToDeg(Mathf.Atan2(heldKey.Position.X, heldKey.Position.Z)) + 180;
+        SetKeysInteractionEnabled(false);
     }
 
     public void OnEndTurning(RotaryPhoneHole key) {
         if (hasHitEnd) {
-            GD.Print("DIALED KEY " + key.hoverString);
+            OnKeyDialed(key.hoverString);
         }
         isTurning = false;
         heldKey = null;
         hasHitEnd = false;
         desiredRotation = 0;
-        // disable all buttons
-        // rotate back to the beginning at a fix rate
-        // re-enable buttons
     }
 
 
@@ -282,14 +280,15 @@ public partial class PhoneController : Interactable
     {
         handsetModel.Visible = true;
         dialToneAudio.Stop();
+        currentSequence.Clear();
+        /*
         disconnectedToneAudio.Stop();
         notFoundAudio.Stop();
         otherHangUpAudio.Stop();
         ringToneAudio.Stop();
-        currentSequence.Clear();
         hangUpAudio.Play();
+        */
         isDialing = false;
-        modemAudio.Stop();
 
         EmitSignal(SignalName.OnPhoneHangUp);
         canReceiveCall = true;
@@ -363,7 +362,7 @@ public partial class PhoneController : Interactable
 
         currentSequence.Add(key);
 
-        EmitSignal(SignalName.OnPhoneKeyPressed, GetFormattedSequence());
+        EmitSignal(SignalName.OnPhoneKeyDialed, GetFormattedSequence());
 
         if (currentSequence.Count == sequenceLength && isDialing)
             CallNumber();

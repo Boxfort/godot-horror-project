@@ -1,13 +1,16 @@
-[gd_scene load_steps=11 format=3 uid="uid://q2hfo0t7yqjv"]
+[gd_scene load_steps=14 format=3 uid="uid://q2hfo0t7yqjv"]
 
 [ext_resource type="Shader" path="res://assets/postprocessing/pp_band-dither.gdshader" id="1_1rspr"]
 [ext_resource type="PackedScene" uid="uid://ceanolwofwqvh" path="res://assets/scenes/computer/Computer.tscn" id="1_3liej"]
+[ext_resource type="Script" path="res://assets/scenes/managers/phonemanager/PhoneManager.cs" id="2_c87oy"]
 [ext_resource type="PackedScene" uid="uid://dltlx5ruk6pwh" path="res://assets/scenes/player/PlayerController.tscn" id="2_houyb"]
 [ext_resource type="PackedScene" uid="uid://31jqbtlbjda7" path="res://assets/scenes/room/model/room.glb" id="3_bi267"]
 [ext_resource type="PackedScene" uid="uid://c2ne5mbox56hb" path="res://assets/scenes/computer/VT220Keyboard.tscn" id="4_s5whu"]
 [ext_resource type="PackedScene" uid="uid://82isst5s57w7" path="res://assets/scenes/computer/VT220Computer.tscn" id="5_aioxs"]
 [ext_resource type="PackedScene" uid="uid://brk48mkye6u1m" path="res://assets/scenes/phone/Phone.tscn" id="6_04r3t"]
+[ext_resource type="Texture2D" uid="uid://bv706p1rs7d87" path="res://assets/scenes/monster/monster.png" id="8_0v7kx"]
 [ext_resource type="PackedScene" uid="uid://bbo2flkia21d7" path="res://assets/scenes/stool/StoolModel.tscn" id="8_76hxd"]
+[ext_resource type="Script" path="res://assets/scenes/room/WindowMonster.cs" id="9_uuytp"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xl6o6"]
 shader = ExtResource("1_1rspr")
@@ -40,7 +43,13 @@ audio_listener_enable_3d = true
 size = Vector2i(800, 600)
 render_target_update_mode = 4
 
+[node name="PhoneManager" type="Node" parent="CanvasLayer/Dithering/SubViewport"]
+script = ExtResource("2_c87oy")
+
 [node name="Room" type="Node3D" parent="CanvasLayer/Dithering/SubViewport"]
+
+[node name="Stool" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("8_76hxd")]
+transform = Transform3D(0.280446, 0, 0.106537, 0, 0.3, 0, -0.106537, 0, 0.280446, -1.29448, 2.38419e-08, -1.42057)
 
 [node name="Computer" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("1_3liej")]
 transform = Transform3D(0.69282, 0, 0.4, 0, 0.8, 0, -0.4, 0, 0.69282, -2.2789, 1.66339, -0.687671)
@@ -54,7 +63,7 @@ transform = Transform3D(-0.011735, 0, 0.0791346, 0, 0.08, 0, -0.0791346, 0, -0.0
 [node name="PlayerController" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("2_houyb")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.95312, 1.99745, 2.06138)
 
-[node name="room" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("3_bi267")]
+[node name="RoomModel" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("3_bi267")]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="CanvasLayer/Dithering/SubViewport/Room"]
@@ -71,5 +80,13 @@ light_energy = 0.05
 [node name="Phone" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("6_04r3t")]
 transform = Transform3D(0.0934652, 0, -0.0355564, 0, 0.1, 0, 0.0355564, 0, 0.0934652, -2.35175, 1.26119, -2.0096)
 
-[node name="Stool" parent="." instance=ExtResource("8_76hxd")]
-transform = Transform3D(0.280446, 0, 0.106537, 0, 0.3, 0, -0.106537, 0, 0.280446, -1.29448, 2.38419e-08, -1.42057)
+[node name="WindowMonster" type="Sprite3D" parent="CanvasLayer/Dithering/SubViewport/Room"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.69421, 1.6, -4.3)
+texture = ExtResource("8_0v7kx")
+script = ExtResource("9_uuytp")
+
+[node name="VisibleOnScreenNotifier3D" type="VisibleOnScreenNotifier3D" parent="CanvasLayer/Dithering/SubViewport/Room/WindowMonster"]
+aabb = AABB(-0.390403, -0.659301, -0.0718676, 0.780805, 1.3186, 0.143735)
+
+[node name="VisibleOnScreenNotifier3D2" type="VisibleOnScreenNotifier3D" parent="CanvasLayer/Dithering/SubViewport/Room/WindowMonster"]
+aabb = AABB(-0.159491, -0.659301, -0.0718676, 0.318982, 1.3186, 0.143735)

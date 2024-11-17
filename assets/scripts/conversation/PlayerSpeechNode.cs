@@ -7,7 +7,7 @@ public class PlayerSpeechNode : ConversationNode
     int nextNode = -1;
     List<String> text;
 
-    public PlayerSpeechNode(int id)
+    public PlayerSpeechNode(int id): base(id)
     {
         this.id = id;
     }

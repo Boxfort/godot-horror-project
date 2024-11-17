@@ -6,7 +6,7 @@ public class PlayerChoiceNode : ConversationNode
 {
     List<PlayerChoice> choices;
 
-    public PlayerChoiceNode(int id, List<PlayerChoice> choices)
+    public PlayerChoiceNode(int id, List<PlayerChoice> choices): base(id)
     {
         this.id = id;
         this.choices = choices;

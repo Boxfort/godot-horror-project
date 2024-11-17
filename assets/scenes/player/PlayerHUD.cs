@@ -50,17 +50,14 @@ public partial class PlayerHUD : CanvasLayer
         flipPageAction = GetNode<Control>("UI/ActionsContainer/FlipPageAction");
         hangUpAction = GetNode<Control>("UI/ActionsContainer/HangUpAction");
 
-        foreach (Inspectable notepad in GetTree().GetNodesInGroup("inspectable_pages"))
+        foreach (PhoneController phone in GetTree().GetNodesInGroup("phone"))
         {
-            notepad.OnBeginInspecting += OnInspectPages;
-            notepad.OnEndInspecting += OnEndInspectPages;
+            phone.OnPhonePickUp += OnPhonePickedUp;
+            phone.OnPhoneKeyDialed += OnPhoneKeyDialed;
+            phone.OnPhoneNumberCleared += OnPhoneNumberCleared;
+            phone.OnPhoneHangUp += OnPhoneHangUp;
         }
 
-        foreach (Inspectable inspect in GetTree().GetNodesInGroup("inspectable"))
-        {
-            inspect.OnBeginInspecting += OnInspect;
-            inspect.OnEndInspecting += OnEndInspect;
-        }
 
         fadeIn = GetNode<FadeIn>("FadeIn");
     }
@@ -128,8 +125,9 @@ public partial class PlayerHUD : CanvasLayer
         phoneText.Visible = false;
     }
 
-    private void OnPhoneKeyPressed(string dialedNumber)
+    private void OnPhoneKeyDialed(string dialedNumber)
     {
+        GD.Print("oi");
         phoneText.Visible = true;
         phoneText.Text = dialedNumber;
     }    

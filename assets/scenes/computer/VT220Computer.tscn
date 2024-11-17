@@ -1,9 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://82isst5s57w7"]
+[gd_scene load_steps=3 format=3 uid="uid://82isst5s57w7"]
 
 [ext_resource type="PackedScene" uid="uid://bsqmk2dxcykpr" path="res://assets/scenes/computer/model/vt220-computer.glb" id="1_s0x20"]
+[ext_resource type="Material" uid="uid://ds0abxs12qq4w" path="res://assets/scenes/computer/materials/TowerMaterial.tres" id="2_6rq6d"]
 
 [node name="vt220-computer" instance=ExtResource("1_s0x20")]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0.350782)
 
 [node name="Cube" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.69553, 0)
+surface_material_override/0 = ExtResource("2_6rq6d")

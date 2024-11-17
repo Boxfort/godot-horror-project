@@ -1,11 +1,11 @@
-[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://dnaujngtfcskb"]
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://hhmwsm11xph"]
 
-[ext_resource type="Shader" path="res://Assets/Shaders/psx_lit.gdshader" id="1_ms1x1"]
-[ext_resource type="Texture2D" uid="uid://8xbm4lei5tes" path="res://Assets/Scenes/Computer/Model/keyboard.png" id="2_pqpi5"]
+[ext_resource type="Shader" path="res://assets/shaders/psx_lit.gdshader" id="1_g5ev1"]
+[ext_resource type="Texture2D" uid="uid://b3m1ynmxhha6x" path="res://assets/scenes/computer/model/deckeyboardtexture.jpg" id="2_oxeu2"]
 
 [resource]
 render_priority = 0
-shader = ExtResource("1_ms1x1")
+shader = ExtResource("1_g5ev1")
 shader_parameter/precision_multiplier = 0.75
 shader_parameter/modulate_color = Color(1, 1, 1, 1)
 shader_parameter/uv_scale = Vector2(1, 1)
@@ -13,4 +13,4 @@ shader_parameter/uv_offset = Vector2(0, 0)
 shader_parameter/uv_pan_velocity = Vector2(0, 0)
 shader_parameter/flash = false
 shader_parameter/affine_mapping = false
-shader_parameter/albedoTex = ExtResource("2_pqpi5")
+shader_parameter/albedoTex = ExtResource("2_oxeu2")

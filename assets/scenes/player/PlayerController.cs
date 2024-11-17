@@ -51,7 +51,7 @@ public partial class PlayerController : CharacterBody3D
     public override void _Ready()
     {
         head = GetNode<Node3D>("Head");
-        handset = head.GetNode<Node3D>("Handset");
+        handset = head.GetNode<Node3D>("PhoneHandset");
         interactionController = GetNode<InteractionController>("Head/InteractionController");
         playerCamera = head.GetNode<Camera3D>("PlayerCamera");
         stepAudioPlayer = GetNode<AudioStreamPlayer>("FootstepAudio");
@@ -202,7 +202,7 @@ public partial class PlayerController : CharacterBody3D
     public void HandleZoom(double delta)
     {
         if (
-            zoomView //Input.IsActionPressed(ZoomInputAction)
+            zoomView || Input.IsActionPressed(ZoomInputAction)
             && playerCamera.Fov > (defaultFov - zoomFovDecrease)
         )
         {
@@ -213,7 +213,7 @@ public partial class PlayerController : CharacterBody3D
             );
         }
         else if (
-            !zoomView //!Input.IsActionPressed(ZoomInputAction) 
+            !zoomView && !Input.IsActionPressed(ZoomInputAction) 
             && playerCamera.Fov < defaultFov
         )
         {

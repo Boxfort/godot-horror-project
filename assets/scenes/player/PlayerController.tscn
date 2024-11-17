@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://dltlx5ruk6pwh"]
+[gd_scene load_steps=22 format=3 uid="uid://dltlx5ruk6pwh"]
 
 [ext_resource type="Script" path="res://assets/scenes/player/PlayerController.cs" id="1_32mu5"]
 [ext_resource type="AudioStream" uid="uid://bwadfqgiogd4d" path="res://assets/scenes/player/step_01.wav" id="2_ajigu"]
@@ -17,6 +17,7 @@
 [ext_resource type="AudioStream" uid="uid://b6gegdlslu2ns" path="res://assets/scenes/player/step_08.wav" id="9_y1jbt"]
 [ext_resource type="AudioStream" uid="uid://njjvve5kafh4" path="res://assets/scenes/player/step_09.wav" id="10_qtoms"]
 [ext_resource type="Texture2D" uid="uid://4vdv01utongj" path="res://assets/scenes/player/ui/mouse_middle.png" id="10_wi3c2"]
+[ext_resource type="PackedScene" uid="uid://bwakqbqevgdm1" path="res://assets/scenes/phone/PhoneHandsetModel.tscn" id="13_66l1m"]
 [ext_resource type="Script" path="res://assets/scenes/player/FadeIn.cs" id="24_0pnd2"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ttiaw"]
@@ -40,6 +41,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 target_position = Vector3(0, 0, -2.25)
 collision_mask = 3
 script = ExtResource("3_8uuf1")
+
+[node name="PhoneHandset" parent="Head" instance=ExtResource("13_66l1m")]
+transform = Transform3D(0.0277928, 0.0822201, 0.0496732, 0.0162905, -0.0549956, 0.0819152, 0.0946688, -0.0146745, -0.0286788, 0.33, -0.1, -0.34)
+visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0

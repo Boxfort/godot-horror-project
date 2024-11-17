@@ -13,9 +13,6 @@ radius = 0.176886
 [node name="Phone" parent="." index="0"]
 surface_material_override/0 = ExtResource("2_5055p")
 
-[node name="Handset" parent="." index="1"]
-surface_material_override/0 = ExtResource("2_5055p")
-
 [node name="Dots" parent="Empty" index="0"]
 surface_material_override/0 = ExtResource("3_rd4fa")
 
@@ -125,4 +122,5 @@ shape = SubResource("SphereShape3D_vppia")
 surface_material_override/0 = ExtResource("3_rd4fa")
 
 [node name="Stopper" parent="Empty" index="3"]
+transform = Transform3D(0.407855, 0, 0, 0, 0.407855, 0, 0, 0, 0.407855, 0.15, 0.14, -0.736)
 surface_material_override/0 = ExtResource("3_rd4fa")

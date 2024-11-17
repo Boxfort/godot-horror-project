@@ -23,7 +23,7 @@ internal class PlayerUsingPhoneState : State<PlayerState, PlayerController>
         entering = true;
         exiting = false;
         phonePickedUp = false;
-        //node.handset.Show();
+        node.handset.Show();
     }
 
     public override void Exit(PlayerController node)
@@ -36,7 +36,7 @@ internal class PlayerUsingPhoneState : State<PlayerState, PlayerController>
         node.interactingWith = null;
         exiting = false;
         phonePickedUp = false;
-        //node.handset.Hide();
+        node.handset.Hide();
     }
 
     public override PlayerState Update(PlayerController node, double delta)

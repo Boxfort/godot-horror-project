@@ -1,0 +1,66 @@
+{
+    "numbers": {
+        "001": {
+            "conversations": [
+                {
+                    "id": 0,
+                    "requirements": ["has_done_thing_flag"],
+                    "nodes": [
+                       {
+                          "id": 0, 
+                          "type": "npc_speech",
+                          "next": 1,
+                          "text": [
+                            "This is the first line",
+                            "This is the second line"
+                          ]
+                       },
+                       {
+                          "id": 1, 
+                          "type": "player_choice",
+                          "choices": [
+                            {
+                                "id": 0,
+                                "text": "choice A",
+                                "next": 0
+                            },
+                            {
+                                "id": 1,
+                                "text": "choice B",
+                                "next": 0
+                            }
+                          ]
+                       }
+                    ]
+                }
+            ]
+        },
+        "555012": {
+            "conversations": [
+                {
+                    "id": 0,
+                    "requirements": ["has_done_thing_flag"],
+                    "entry_node": 0,
+                    "nodes": [
+                       {
+                          "id": 0, 
+                          "type": "npc_speech",
+                          "next": 1,
+                          "text": [
+                            "A This is the first line"
+                          ]
+                       },
+                       {
+                          "id": 0, 
+                          "type": "npc_speech",
+                          "next": 0,
+                          "text": [
+                            "B This is the first line"
+                          ]
+                       }
+                    ]
+                }
+            ]
+        }
+    }
+}

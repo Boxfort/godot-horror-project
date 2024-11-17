@@ -21,7 +21,7 @@ public partial class Conversation : Resource
 
         foreach (ConversationNode n in nodes)
         {
-            this.nodes.Add(n.Id, n);
+            this.nodes.Add(n.id, n);
         }
     }
 
@@ -32,7 +32,7 @@ public partial class Conversation : Resource
 
     public void AddNode(ConversationNode node)
     {
-        this.nodes.Add(node.Id, node);
+        this.nodes.Add(node.id, node);
     }
 
     public ConversationNode GetCurrentNode()

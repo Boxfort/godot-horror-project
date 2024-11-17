@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://bwakqbqevgdm1"]
+
+[ext_resource type="PackedScene" uid="uid://dp4my6ai8k075" path="res://assets/scenes/phone/model/PhoneHandset.glb" id="1_k2e5n"]
+[ext_resource type="Material" uid="uid://b0h0ywcyyh1eg" path="res://assets/scenes/phone/materials/PhoneBodyMaterial.tres" id="2_mgfln"]
+[ext_resource type="Material" uid="uid://cgoh6u35wkps5" path="res://assets/scenes/phone/materials/PhoneMaterial.tres" id="3_7613c"]
+
+[node name="PhoneHandset" instance=ExtResource("1_k2e5n")]
+
+[node name="Handset" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_mgfln")
+surface_material_override/1 = ExtResource("3_7613c")
