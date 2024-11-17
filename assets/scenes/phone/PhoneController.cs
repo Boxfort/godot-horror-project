@@ -31,6 +31,12 @@ public partial class PhoneController : Interactable
 
     Node3D handsetModel;
     Node3D fingerHoles;
+    Node3D dots;
+    Node3D heldKey;
+    float heldKeyAngle;
+
+    AudioStreamPlayer3D rotaryClickAudio;
+    AudioStreamPlayer3D rotaryWindingAudio;
 
     AudioStreamPlayer dialToneAudio;
     AudioStreamPlayer disconnectedToneAudio;
@@ -62,6 +68,7 @@ public partial class PhoneController : Interactable
         //networkManager = (NetworkManager)GetTree().GetFirstNodeInGroup("network_manager");
 
         fingerHoles = GetNode<Node3D>("PhoneModel/Empty/FingerHoles");
+        dots = GetNode<Node3D>("PhoneModel/Empty/Dots");
 
         foreach(Node n in fingerHoles.GetChildren()) {
             if (n is RotaryPhoneHole r) {
@@ -69,6 +76,9 @@ public partial class PhoneController : Interactable
                 r.OnEndInteraction += () => OnEndTurning(r);
             }
         }
+
+        rotaryClickAudio = GetNode<AudioStreamPlayer3D>("RotaryClickAudio");
+        rotaryWindingAudio = GetNode<AudioStreamPlayer3D>("RotaryWindingAudio");
 
         handsetModel = GetNode<Node3D>("Phone/Handset");
         dialToneAudio = GetNode<AudioStreamPlayer>("DialToneAudio");
@@ -81,9 +91,64 @@ public partial class PhoneController : Interactable
         modemAudio = GetNode<AudioStreamPlayer>("ModemAudio");
     }
 
+
+    float desiredRotation = 0;
+    bool hasHitEnd = false;
+    bool lastRotWasClockwise = false;
+
+    float lastRotaryWindingAudioPos = 0;
+
     public override void _Process(double delta)
     {
-        // no-op
+        if (isTurning && !hasHitEnd && fingerHoles.RotationDegrees.Y != desiredRotation) 
+        {
+            var rotDeg = fingerHoles.RotationDegrees;
+            var newRot = Mathf.Clamp(lerp(rotDeg.Y, desiredRotation, (float)delta * 30), -310, -5);
+
+            // Only turn if the change in angle is not too extreme
+            var deltaRot = Mathf.Abs(rotDeg.Y - newRot) ;
+            if ( deltaRot < 45) 
+            {
+                rotDeg.Y = newRot;
+            } 
+            else if (lastRotWasClockwise) 
+            {
+                // If we were turning too hard then just keep going anyway
+                rotDeg.Y = Mathf.Clamp(lerp(rotDeg.Y, -310, (float)delta * 15), -310, -5);
+            }
+            lastRotWasClockwise = fingerHoles.RotationDegrees.Y - rotDeg.Y > 0;
+            fingerHoles.RotationDegrees = rotDeg;
+
+            if (deltaRot > 0) {
+                if (!rotaryWindingAudio.Playing) {
+                    rotaryWindingAudio.Play(lastRotaryWindingAudioPos);
+                }
+
+                float audioPitch = (Mathf.Clamp(deltaRot, 0, 1) * 0.2f) + 0.9f;
+                rotaryWindingAudio.VolumeDb = -25 + Mathf.Clamp(deltaRot, 0, 0.5f) * 50;
+                rotaryWindingAudio.PitchScale = audioPitch;
+            } else {
+                lastRotaryWindingAudioPos = rotaryWindingAudio.GetPlaybackPosition();
+                rotaryWindingAudio.Stop();
+            }
+
+            // If we've hit the end then stop
+            if (fingerHoles.RotationDegrees.Y <= -305) {
+                GD.Print("HIT END");
+                hasHitEnd = true;
+                rotaryClickAudio.PitchScale = 1f;
+                rotaryClickAudio.Play();
+                rotaryWindingAudio.Stop();
+            }
+        } 
+        else if (!isTurning && fingerHoles.RotationDegrees.Y != 0) 
+        {
+            RotateBackToStart(delta);
+        }
+    }
+
+    float lerp (float a, float b, float f) {
+        return a + f * (b - a);
     }
     
     
@@ -98,9 +163,31 @@ public partial class PhoneController : Interactable
             );
 
             if (point != null) {
-                GetNode<Node3D>("Debug").GlobalPosition = point.Value;
+                var debug = GetNode<Node3D>("Debug");
+                debug.GlobalPosition = point.Value;
+                var offset = dots.ToLocal(debug.GlobalPosition);
+                var deg = (MathF.Atan2(offset.X, offset.Z) * (180/MathF.PI)) + 180;
+                var rotationOffset = 360 - heldKeyAngle;
+                desiredRotation = -360 + rotationOffset + deg;
+                //GD.Print("desired: " + desiredRotation);
             }
-            //GD.Print(point);
+        }
+    }
+
+    private void RotateBackToStart(double delta)
+    {
+        rotaryWindingAudio.PitchScale = 1;
+        rotaryWindingAudio.VolumeDb = 0;
+        if (!rotaryWindingAudio.Playing) rotaryWindingAudio.Play();
+
+        var rotDeg = fingerHoles.RotationDegrees;
+        rotDeg.Y = Mathf.Min(rotDeg.Y + ((float)delta * 300), 0);
+        fingerHoles.RotationDegrees = rotDeg;
+
+        if (rotDeg.Y == 0) {
+            rotaryClickAudio.PitchScale = 0.9f;
+            rotaryClickAudio.Play();
+            rotaryWindingAudio.Stop();
         }
     }
         
@@ -108,11 +195,19 @@ public partial class PhoneController : Interactable
     public void OnBeginTurning(RotaryPhoneHole key) {
         GD.Print("Turning");
         isTurning = true;
+        heldKey = key;
+        heldKeyAngle = (MathF.Atan2(heldKey.Position.X, heldKey.Position.Z) * (180/MathF.PI)) + 180;
     }
 
     public void OnEndTurning(RotaryPhoneHole key) {
         GD.Print("Not Turning");
+        if (hasHitEnd) {
+            GD.Print("DIALED KEY " + key.hoverString);
+        }
         isTurning = false;
+        heldKey = null;
+        hasHitEnd = false;
+        desiredRotation = 0;
         // disable all buttons
         // rotate back to the beginning at a fix rate
         // re-enable buttons

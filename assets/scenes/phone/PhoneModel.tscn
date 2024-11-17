@@ -31,6 +31,16 @@ script = ExtResource("4_eote3")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0707518, -0.173792, 0)
 shape = SubResource("SphereShape3D_vppia")
 
+[node name="Interact-1" type="CharacterBody3D" parent="Empty/FingerHoles" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.657787, 0.162865, -0.209784)
+motion_mode = 1
+script = ExtResource("4_eote3")
+hoverString = "1"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Empty/FingerHoles/Interact-1" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0707518, -0.173792, 0)
+shape = SubResource("SphereShape3D_vppia")
+
 [node name="NumbersAndLetters" parent="Empty" index="2"]
 surface_material_override/0 = ExtResource("3_rd4fa")
 
