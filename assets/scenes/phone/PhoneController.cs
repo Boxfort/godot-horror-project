@@ -103,27 +103,27 @@ public partial class PhoneController : Interactable
         if (isTurning && !hasHitEnd && fingerHoles.RotationDegrees.Y != desiredRotation) 
         {
             var rotDeg = fingerHoles.RotationDegrees;
-            var newRot = Mathf.Clamp(lerp(rotDeg.Y, desiredRotation, (float)delta * 30), -heldKeyAngle, -5);
+            var newRot = Mathf.Clamp(Mathf.Lerp(rotDeg.Y, desiredRotation, (float)delta * 30), -heldKeyAngle, -5);
 
             // Only turn if the change in angle is not too extreme
-            var deltaRot = Mathf.Abs(rotDeg.Y - newRot) ;
-            if ( deltaRot < 45) 
+            var deltaRot = Mathf.Abs(rotDeg.Y - desiredRotation);
+            if (deltaRot < 45) 
             {
                 rotDeg.Y = newRot;
+                lastRotWasClockwise = fingerHoles.RotationDegrees.Y - rotDeg.Y > 0;
             } 
             else if (lastRotWasClockwise) 
             {
-                // If we were turning too hard then just keep going anyway
-                rotDeg.Y = Mathf.Clamp(lerp(rotDeg.Y, -heldKeyAngle, (float)delta * 15), -heldKeyAngle, -5);
+                // If the angle becomes too extreme but we were winding clockwise just keep going
+                rotDeg.Y = Mathf.Clamp(Mathf.Lerp(rotDeg.Y, -heldKeyAngle, (float)delta * 15), -heldKeyAngle, -5);
             }
-            lastRotWasClockwise = fingerHoles.RotationDegrees.Y - rotDeg.Y > 0;
             fingerHoles.RotationDegrees = rotDeg;
 
+            // Handle the winding audio
             if (deltaRot > 0) {
                 if (!rotaryWindingAudio.Playing) {
                     rotaryWindingAudio.Play(lastRotaryWindingAudioPos);
                 }
-
                 float audioPitch = (Mathf.Clamp(deltaRot, 0, 1) * 0.2f) + 0.9f;
                 rotaryWindingAudio.VolumeDb = -25 + Mathf.Clamp(deltaRot, 0, 0.5f) * 50;
                 rotaryWindingAudio.PitchScale = audioPitch;
@@ -135,7 +135,6 @@ public partial class PhoneController : Interactable
             // If we've hit the end then stop
             if (fingerHoles.RotationDegrees.Y <= -heldKeyAngle+10) 
             {
-                GD.Print("HIT END");
                 hasHitEnd = true;
                 rotaryClickAudio.PitchScale = 1f;
                 rotaryClickAudio.Play();
@@ -148,11 +147,6 @@ public partial class PhoneController : Interactable
         }
     }
 
-    float lerp (float a, float b, float f) {
-        return a + f * (b - a);
-    }
-    
-    
     public void IncomingRay(Vector3 from, Vector3 direction) 
     {
         if (isTurning) {
@@ -167,12 +161,12 @@ public partial class PhoneController : Interactable
                 var debug = GetNode<Node3D>("Debug");
                 debug.GlobalPosition = point.Value;
                 var offset = dots.ToLocal(debug.GlobalPosition);
-                var deg = (MathF.Atan2(offset.X, offset.Z) * (180/MathF.PI)) + 180;
+                var deg = Mathf.RadToDeg(Mathf.Atan2(offset.X, offset.Z)) + 180;
                 var rotationOffset = 360 - heldKeyAngle;
                 desiredRotation = -360 + rotationOffset + deg;
-                GD.Print("desired: " + desiredRotation);
-                GD.Print("heldangle: " + heldKeyAngle);
-                GD.Print("limit: " + heldKeyAngle);
+                //GD.Print("deg: " + deg);
+                //GD.Print("desired: " + desiredRotation);
+                //GD.Print("heldangle: " + heldKeyAngle);
             }
         }
     }
@@ -184,7 +178,7 @@ public partial class PhoneController : Interactable
         if (!rotaryWindingAudio.Playing) rotaryWindingAudio.Play();
 
         var rotDeg = fingerHoles.RotationDegrees;
-        rotDeg.Y = Mathf.Min(rotDeg.Y + ((float)delta * 300), 0);
+        rotDeg.Y = Mathf.Min(Mathf.MoveToward(rotDeg.Y, 0, (float)delta * 300), 0f);
         fingerHoles.RotationDegrees = rotDeg;
 
         if (rotDeg.Y == 0) {
@@ -196,14 +190,12 @@ public partial class PhoneController : Interactable
         
     
     public void OnBeginTurning(RotaryPhoneHole key) {
-        GD.Print("Turning");
         isTurning = true;
         heldKey = key;
-        heldKeyAngle = (MathF.Atan2(heldKey.Position.X, heldKey.Position.Z) * (180/MathF.PI)) + 180;
+        heldKeyAngle = Mathf.RadToDeg(Mathf.Atan2(heldKey.Position.X, heldKey.Position.Z)) + 180;
     }
 
     public void OnEndTurning(RotaryPhoneHole key) {
-        GD.Print("Not Turning");
         if (hasHitEnd) {
             GD.Print("DIALED KEY " + key.hoverString);
         }
