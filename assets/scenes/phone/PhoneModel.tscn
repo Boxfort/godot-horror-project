@@ -32,12 +32,92 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0707518, -0.173792, 0)
 shape = SubResource("SphereShape3D_vppia")
 
 [node name="Interact-1" type="CharacterBody3D" parent="Empty/FingerHoles" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.657787, 0.162865, -0.209784)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.573922, 0.155558, -0.496382)
 motion_mode = 1
 script = ExtResource("4_eote3")
 hoverString = "1"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Empty/FingerHoles/Interact-1" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0707518, -0.173792, 0)
+shape = SubResource("SphereShape3D_vppia")
+
+[node name="Interact-2" type="CharacterBody3D" parent="Empty/FingerHoles" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.688441, 0.108936, -0.151326)
+motion_mode = 1
+script = ExtResource("4_eote3")
+hoverString = "2"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Empty/FingerHoles/Interact-2" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0252034, -0.12672, -0.0215998)
+shape = SubResource("SphereShape3D_vppia")
+
+[node name="Interact-3" type="CharacterBody3D" parent="Empty/FingerHoles" index="3"]
+transform = Transform3D(1, 2.98023e-08, 0, -2.98023e-08, 1, 0, 0, 0, 1, -0.747047, 0.170463, 0.205884)
+motion_mode = 1
+script = ExtResource("4_eote3")
+hoverString = "3"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Empty/FingerHoles/Interact-3" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0707518, -0.173792, 0)
+shape = SubResource("SphereShape3D_vppia")
+
+[node name="Interact-4" type="CharacterBody3D" parent="Empty/FingerHoles" index="4"]
+transform = Transform3D(1, 5.96046e-08, 0, -5.96046e-08, 1, 0, 0, 0, 1, -0.579784, 0.187606, 0.521799)
+motion_mode = 1
+script = ExtResource("4_eote3")
+hoverString = "4"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Empty/FingerHoles/Interact-4" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0707518, -0.173792, 0)
+shape = SubResource("SphereShape3D_vppia")
+
+[node name="Interact-5" type="CharacterBody3D" parent="Empty/FingerHoles" index="5"]
+transform = Transform3D(1, 1.19209e-07, 0, -1.19209e-07, 1, 0, 0, 0, 1, -0.273192, 0.178776, 0.72313)
+motion_mode = 1
+script = ExtResource("4_eote3")
+hoverString = "5"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Empty/FingerHoles/Interact-5" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0707518, -0.173792, 0)
+shape = SubResource("SphereShape3D_vppia")
+
+[node name="Interact-6" type="CharacterBody3D" parent="Empty/FingerHoles" index="6"]
+transform = Transform3D(1, 1.49012e-07, 0, -1.49012e-07, 1, 0, 0, 0, 1, 0.10368, 0.185084, 0.742943)
+motion_mode = 1
+script = ExtResource("4_eote3")
+hoverString = "6"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Empty/FingerHoles/Interact-6" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0707518, -0.173792, 0)
+shape = SubResource("SphereShape3D_vppia")
+
+[node name="Interact-7" type="CharacterBody3D" parent="Empty/FingerHoles" index="7"]
+transform = Transform3D(1, 1.49012e-07, 0, -1.49012e-07, 1, 0, 0, 0, 1, 0.44767, 0.167226, 0.537332)
+motion_mode = 1
+script = ExtResource("4_eote3")
+hoverString = "7"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Empty/FingerHoles/Interact-7" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0707518, -0.173792, 0)
+shape = SubResource("SphereShape3D_vppia")
+
+[node name="Interact-8" type="CharacterBody3D" parent="Empty/FingerHoles" index="8"]
+transform = Transform3D(1, 2.98023e-08, 0, -2.98023e-08, 1, 0, 0, 0, 1, 0.657787, 0.162865, 0.198532)
+motion_mode = 1
+script = ExtResource("4_eote3")
+hoverString = "8"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Empty/FingerHoles/Interact-8" index="0"]
+transform = Transform3D(1, -5.96046e-08, 0, 5.96046e-08, 1, 0, 0, 0, 1, 0.0380707, -0.164511, 0.00248115)
+shape = SubResource("SphereShape3D_vppia")
+
+[node name="Interact-9" type="CharacterBody3D" parent="Empty/FingerHoles" index="9"]
+transform = Transform3D(1, 2.98023e-08, 0, -2.98023e-08, 1, 0, 0, 0, 1, 0.657787, 0.162865, -0.209784)
+motion_mode = 1
+script = ExtResource("4_eote3")
+hoverString = "9"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Empty/FingerHoles/Interact-9" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0707518, -0.173792, 0)
 shape = SubResource("SphereShape3D_vppia")
 

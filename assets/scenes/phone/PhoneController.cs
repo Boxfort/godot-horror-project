@@ -103,7 +103,7 @@ public partial class PhoneController : Interactable
         if (isTurning && !hasHitEnd && fingerHoles.RotationDegrees.Y != desiredRotation) 
         {
             var rotDeg = fingerHoles.RotationDegrees;
-            var newRot = Mathf.Clamp(lerp(rotDeg.Y, desiredRotation, (float)delta * 30), -310, -5);
+            var newRot = Mathf.Clamp(lerp(rotDeg.Y, desiredRotation, (float)delta * 30), -heldKeyAngle, -5);
 
             // Only turn if the change in angle is not too extreme
             var deltaRot = Mathf.Abs(rotDeg.Y - newRot) ;
@@ -114,7 +114,7 @@ public partial class PhoneController : Interactable
             else if (lastRotWasClockwise) 
             {
                 // If we were turning too hard then just keep going anyway
-                rotDeg.Y = Mathf.Clamp(lerp(rotDeg.Y, -310, (float)delta * 15), -310, -5);
+                rotDeg.Y = Mathf.Clamp(lerp(rotDeg.Y, -heldKeyAngle, (float)delta * 15), -heldKeyAngle, -5);
             }
             lastRotWasClockwise = fingerHoles.RotationDegrees.Y - rotDeg.Y > 0;
             fingerHoles.RotationDegrees = rotDeg;
@@ -133,7 +133,8 @@ public partial class PhoneController : Interactable
             }
 
             // If we've hit the end then stop
-            if (fingerHoles.RotationDegrees.Y <= -305) {
+            if (fingerHoles.RotationDegrees.Y <= -heldKeyAngle+10) 
+            {
                 GD.Print("HIT END");
                 hasHitEnd = true;
                 rotaryClickAudio.PitchScale = 1f;
@@ -169,7 +170,9 @@ public partial class PhoneController : Interactable
                 var deg = (MathF.Atan2(offset.X, offset.Z) * (180/MathF.PI)) + 180;
                 var rotationOffset = 360 - heldKeyAngle;
                 desiredRotation = -360 + rotationOffset + deg;
-                //GD.Print("desired: " + desiredRotation);
+                GD.Print("desired: " + desiredRotation);
+                GD.Print("heldangle: " + heldKeyAngle);
+                GD.Print("limit: " + heldKeyAngle);
             }
         }
     }
