@@ -29,7 +29,7 @@ void vertex()
 	UV += uv_pan_velocity * TIME;
 
 	POSITION = get_snapped_pos(PROJECTION_MATRIX * MODELVIEW_MATRIX * vec4(VERTEX, 1.0));  // snap position to grid
-    
+
     if (affine_mapping) {
 	   POSITION /= abs(POSITION.w);  // discard depth for affine mapping
     }

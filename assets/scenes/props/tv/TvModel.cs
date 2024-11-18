@@ -4,9 +4,13 @@ using System;
 public partial class TvModel : Node3D
 {
     [Export]
+    Material screenOffMaterial;
+
+    [Export]
     SubViewport screenViewport;
     ShaderMaterial screenMaterial;
     public MeshInstance3D screenMesh;
+    
 
     public ShaderMaterial ScreenMaterial
     {
@@ -21,6 +25,19 @@ public partial class TvModel : Node3D
         ViewportTexture viewportTexture = screenViewport.GetTexture();
         screenMaterial.SetShaderParameter("albedoTex", viewportTexture);
         screenMaterial.SetShaderParameter("modulate_color", new Color(1, 1, 1));
+    }
+
+    public void ShowScreen()
+    {
+        screenMaterial.SetShaderParameter("modulate_color", new Color(1, 1, 1));
+        ViewportTexture viewportTexture = screenViewport.GetTexture();
+        screenMaterial.SetShaderParameter("albedoTex", viewportTexture);
+    }
+
+    public void HideScreen()
+    {
+        screenMaterial.SetShaderParameter("modulate_color", new Color(0, 0, 0));
+        screenMaterial.SetShaderParameter("albedoTex", screenOffMaterial);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -1,0 +1,18 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cafao46yxa4gw"]
+
+[ext_resource type="Shader" path="res://assets/shaders/psx_unlit_viewport.gdshader" id="1_o6bui"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_o6bui")
+shader_parameter/precision_multiplier = 0.75
+shader_parameter/modulate_color = Color(0, 0, 0, 1)
+shader_parameter/uv_scale = Vector2(4, 4.955)
+shader_parameter/uv_offset = Vector2(1.49, 2)
+shader_parameter/uv_pan_velocity = Vector2(0, 0)
+shader_parameter/uv_pivot = Vector2(0, 0)
+shader_parameter/uv_rotation = -1.571
+shader_parameter/affine_mapping = false
+shader_parameter/saturation = 1.0
+shader_parameter/brightness = 1.0
+shader_parameter/contrast = 1.0

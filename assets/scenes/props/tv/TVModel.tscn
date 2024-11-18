@@ -1,25 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://kgplnjphma6a"]
+[gd_scene load_steps=8 format=3 uid="uid://kgplnjphma6a"]
 
 [ext_resource type="PackedScene" uid="uid://dkve877khugcc" path="res://assets/scenes/props/tv/model/tv.glb" id="1_qibbu"]
-[ext_resource type="Shader" path="res://assets/shaders/psx_unlit_viewport.gdshader" id="2_881tt"]
+[ext_resource type="Material" uid="uid://cafao46yxa4gw" path="res://assets/scenes/props/tv/materials/ScreenOffMaterial.tres" id="2_eyoqd"]
 [ext_resource type="Shader" path="res://assets/shaders/psx_lit.gdshader" id="3_ote28"]
 [ext_resource type="Texture2D" uid="uid://d2tqgsqdxjbhx" path="res://assets/scenes/props/tv/model/tv_tv.jpg" id="4_fwyg3"]
 [ext_resource type="Texture2D" uid="uid://cmdeequ7w6g6" path="res://assets/scenes/props/tv/model/tv_wooden-texture-background1-1776490266.jpg" id="5_ryiim"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8orrc"]
-render_priority = 0
-shader = ExtResource("2_881tt")
-shader_parameter/precision_multiplier = 0.75
-shader_parameter/modulate_color = Color(0, 0, 0, 1)
-shader_parameter/uv_scale = Vector2(4, 4.955)
-shader_parameter/uv_offset = Vector2(1.49, 2)
-shader_parameter/uv_pan_velocity = Vector2(0, 0)
-shader_parameter/uv_pivot = Vector2(0, 0)
-shader_parameter/uv_rotation = -1.571
-shader_parameter/affine_mapping = false
-shader_parameter/saturation = 1.0
-shader_parameter/brightness = 1.0
-shader_parameter/contrast = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vxf15"]
 render_priority = 0
@@ -48,6 +33,6 @@ shader_parameter/albedoTex = ExtResource("5_ryiim")
 [node name="TVModel" instance=ExtResource("1_qibbu")]
 
 [node name="tv" parent="." index="0"]
-surface_material_override/0 = SubResource("ShaderMaterial_8orrc")
+surface_material_override/0 = ExtResource("2_eyoqd")
 surface_material_override/1 = SubResource("ShaderMaterial_vxf15")
 surface_material_override/2 = SubResource("ShaderMaterial_hqfvg")
