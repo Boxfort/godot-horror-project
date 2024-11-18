@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public partial class WindowMonster : Sprite3D
 {
@@ -16,8 +17,9 @@ public partial class WindowMonster : Sprite3D
     {
         visiblityNotifier = GetNode<VisibleOnScreenNotifier3D>("VisibleOnScreenNotifier3D");
         visiblityNotifierMiddle = GetNode<VisibleOnScreenNotifier3D>("VisibleOnScreenNotifier3D2");
-        visiblityNotifier.ScreenEntered += () => {
+        visiblityNotifier.ScreenEntered += async () => {
             GD.Print("ENTERED SCREEN");
+            await Task.Delay(100);
             shouldMove = true;
         };
 

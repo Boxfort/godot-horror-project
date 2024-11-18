@@ -18,7 +18,7 @@ public partial class PhoneController : Interactable
     public delegate void OnPhoneNumberClearedEventHandler();
 
     [Signal]
-    public delegate void OnConversationStartEventHandler(Conversation conversation);
+    public delegate void OnConversationStartEventHandler(ConversationData conversation);
 
     readonly Random rng = new();
 
@@ -49,24 +49,26 @@ public partial class PhoneController : Interactable
     bool isDialing = false;
     bool canReceiveCall = true;
 
-    //PhoneNumberManager numberManager;
+    PhoneNumberManager numberManager;
     //NetworkManager networkManager;
 
-    Conversation incomingConversation;
+    ConversationData incomingConversation;
     bool isRinging = false;
 
     bool isTurning = false;
 
     public override void _Ready()
     {
-        //numberManager = (PhoneNumberManager)GetTree().GetFirstNodeInGroup("number_manager");
+        numberManager = (PhoneNumberManager)GetTree().GetFirstNodeInGroup("number_manager");
         //networkManager = (NetworkManager)GetTree().GetFirstNodeInGroup("network_manager");
 
         fingerHoles = GetNode<Node3D>("PhoneModel/Empty/FingerHoles");
         dots = GetNode<Node3D>("PhoneModel/Empty/Dots");
 
-        foreach(Node n in fingerHoles.GetChildren()) {
-            if (n is RotaryPhoneHole r) {
+        foreach (Node n in fingerHoles.GetChildren())
+        {
+            if (n is RotaryPhoneHole r)
+            {
                 r.OnBeginInteraction += () => OnBeginTurning(r);
                 r.OnEndInteraction += () => OnEndTurning(r);
             }
@@ -93,19 +95,19 @@ public partial class PhoneController : Interactable
 
     public override void _Process(double delta)
     {
-        if (isTurning && !hasHitEnd && fingerHoles.RotationDegrees.Y != desiredRotation) 
+        if (isTurning && !hasHitEnd && fingerHoles.RotationDegrees.Y != desiredRotation)
         {
             var rotDeg = fingerHoles.RotationDegrees;
             var newRot = Mathf.Clamp(Mathf.Lerp(rotDeg.Y, desiredRotation, (float)delta * 30), -heldKeyAngle, -5);
 
             // Only turn if the change in angle is not too extreme
             var deltaRot = Mathf.Abs(rotDeg.Y - desiredRotation);
-            if (deltaRot < 45) 
+            if (deltaRot < 45)
             {
                 rotDeg.Y = newRot;
                 lastRotWasClockwise = fingerHoles.RotationDegrees.Y - rotDeg.Y > 0;
-            } 
-            else if (lastRotWasClockwise) 
+            }
+            else if (lastRotWasClockwise)
             {
                 // If the angle becomes too extreme but we were winding clockwise just keep going
                 rotDeg.Y = Mathf.Clamp(Mathf.Lerp(rotDeg.Y, -heldKeyAngle, (float)delta * 15), -heldKeyAngle, -5);
@@ -113,36 +115,41 @@ public partial class PhoneController : Interactable
             fingerHoles.RotationDegrees = rotDeg;
 
             // Handle the winding audio
-            if (deltaRot > 0) {
-                if (!rotaryWindingAudio.Playing) {
+            if (deltaRot > 0)
+            {
+                if (!rotaryWindingAudio.Playing)
+                {
                     rotaryWindingAudio.Play(lastRotaryWindingAudioPos);
                 }
                 float audioPitch = (Mathf.Clamp(deltaRot, 0, 1) * 0.2f) + 0.9f;
                 rotaryWindingAudio.VolumeDb = -25 + Mathf.Clamp(deltaRot, 0, 0.5f) * 50;
                 rotaryWindingAudio.PitchScale = audioPitch;
-            } else {
+            }
+            else
+            {
                 lastRotaryWindingAudioPos = rotaryWindingAudio.GetPlaybackPosition();
                 rotaryWindingAudio.Stop();
             }
 
             // If we've hit the end then stop
-            if (fingerHoles.RotationDegrees.Y <= -heldKeyAngle+10) 
+            if (fingerHoles.RotationDegrees.Y <= -heldKeyAngle + 10)
             {
                 hasHitEnd = true;
                 rotaryClickAudio.PitchScale = 1f;
                 rotaryClickAudio.Play();
                 rotaryWindingAudio.Stop();
             }
-        } 
-        else if (!isTurning && fingerHoles.RotationDegrees.Y != 0) 
+        }
+        else if (!isTurning && fingerHoles.RotationDegrees.Y != 0)
         {
             RotateBackToStart(delta);
         }
     }
 
-    public void IncomingRay(Vector3 from, Vector3 direction) 
+    public void IncomingRay(Vector3 from, Vector3 direction)
     {
-        if (isTurning) {
+        if (isTurning)
+        {
             Vector3? point = IntersectPoint(
                 fingerHoles.GlobalPosition,
                 fingerHoles.GlobalTransform.Basis.Y,
@@ -150,7 +157,8 @@ public partial class PhoneController : Interactable
                 direction
             );
 
-            if (point != null) {
+            if (point != null)
+            {
                 var debug = GetNode<Node3D>("Debug");
                 debug.GlobalPosition = point.Value;
                 var offset = dots.ToLocal(debug.GlobalPosition);
@@ -161,9 +169,12 @@ public partial class PhoneController : Interactable
         }
     }
 
-    private void SetKeysInteractionEnabled(bool isEnabled) {
-        foreach(Node n in fingerHoles.GetChildren()) {
-            if (n is RotaryPhoneHole r) {
+    private void SetKeysInteractionEnabled(bool isEnabled)
+    {
+        foreach (Node n in fingerHoles.GetChildren())
+        {
+            if (n is RotaryPhoneHole r)
+            {
                 r.CanInteract = isEnabled;
                 r.HoverEnabled = isEnabled;
             }
@@ -180,24 +191,28 @@ public partial class PhoneController : Interactable
         rotDeg.Y = Mathf.Min(Mathf.MoveToward(rotDeg.Y, 0, (float)delta * 300), 0f);
         fingerHoles.RotationDegrees = rotDeg;
 
-        if (rotDeg.Y == 0) {
+        if (rotDeg.Y == 0)
+        {
             rotaryClickAudio.PitchScale = 0.9f;
             rotaryClickAudio.Play();
             rotaryWindingAudio.Stop();
             SetKeysInteractionEnabled(true);
         }
     }
-        
-    
-    public void OnBeginTurning(RotaryPhoneHole key) {
+
+
+    public void OnBeginTurning(RotaryPhoneHole key)
+    {
         isTurning = true;
         heldKey = key;
         heldKeyAngle = Mathf.RadToDeg(Mathf.Atan2(heldKey.Position.X, heldKey.Position.Z)) + 180;
         SetKeysInteractionEnabled(false);
     }
 
-    public void OnEndTurning(RotaryPhoneHole key) {
-        if (hasHitEnd) {
+    public void OnEndTurning(RotaryPhoneHole key)
+    {
+        if (hasHitEnd)
+        {
             OnKeyDialed(key.hoverString);
         }
         isTurning = false;
@@ -232,14 +247,17 @@ public partial class PhoneController : Interactable
         }
     }
 
-    public async void RingPhone(Conversation conversation)
+    public async void RingPhone(ConversationData conversation)
     {
         if (isRinging) return;
+
+        GD.Print("Incoming call");
 
         isRinging = true;
         incomingConversation = conversation;
 
-        while (!canReceiveCall) {
+        while (!canReceiveCall)
+        {
             await Task.Delay(100);
         }
 
@@ -279,16 +297,18 @@ public partial class PhoneController : Interactable
     public void HangupPhone()
     {
         handsetModel.Visible = true;
-        dialToneAudio.Stop();
         currentSequence.Clear();
-        /*
-        disconnectedToneAudio.Stop();
-        notFoundAudio.Stop();
-        otherHangUpAudio.Stop();
-        ringToneAudio.Stop();
-        hangUpAudio.Play();
-        */
         isDialing = false;
+
+        hangUpAudio.Play();
+
+        dialToneAudio.Stop();
+        ringToneAudio.Stop();
+        otherHangUpAudio.Stop();
+        disconnectedToneAudio.Stop();
+        /*
+        notFoundAudio.Stop();
+        */
 
         EmitSignal(SignalName.OnPhoneHangUp);
         canReceiveCall = true;
@@ -297,56 +317,30 @@ public partial class PhoneController : Interactable
     public void OnConversationComplete()
     {
         otherHangUpAudio.Play();
+        disconnectedToneAudio.Play();
         isDialing = true;
     }
 
-    private async void CallNumber()
+    private async void CallNumber(ConversationData conversation)
     {
+        if (conversation == null) return;
+
         isDialing = false;
         await ToSignal(GetTree().CreateTimer(0.5f), SceneTreeTimer.SignalName.Timeout);
 
-        foreach (String s in currentSequence)
-        {
-            await ToSignal(GetTree().CreateTimer(0.1f), SceneTreeTimer.SignalName.Timeout);
-            //GetNode<PhoneKey>(s).PlayTone();
-        }
-
         EmitSignal(SignalName.OnPhoneNumberCleared);
 
-        await ToSignal(GetTree().CreateTimer(1.0f), SceneTreeTimer.SignalName.Timeout);
+        ringToneAudio.Play();
 
-        string numberString = string.Join("", currentSequence.ToArray());
+        await ToSignal(
+            GetTree().CreateTimer(rng.NextInt64(3, 6)),
+            SceneTreeTimer.SignalName.Timeout
+        );
 
-        /*
-        Conversation conversation = numberManager.GetPhoneNumber(numberString);
+        ringToneAudio.Stop();
 
-        if (conversation != null)
-        {
-            ringToneAudio.Play();
-
-            await ToSignal(
-                GetTree().CreateTimer(rng.NextInt64(3, 6)),
-                SceneTreeTimer.SignalName.Timeout
-            );
-
-            ringToneAudio.Stop();
-
-            EmitSignal(SignalName.OnConversationStart, conversation);
-            isDialing = false;
-        }
-        else
-        {
-            if (networkManager.GetNetwork(numberString) != null)
-            {
-                modemAudio.Play();
-            }
-            else
-            {
-                notFoundAudio.Play();
-            }
-            isDialing = true;
-        }
-        */
+        EmitSignal(SignalName.OnConversationStart, conversation);
+        isDialing = false;
     }
 
     public void OnKeyDialed(String key)
@@ -354,6 +348,7 @@ public partial class PhoneController : Interactable
         if (!isDialing) return;
 
         dialToneAudio.Stop();
+        disconnectedToneAudio.Stop();
 
         if (currentSequence.Count >= sequenceLength)
         {
@@ -364,8 +359,14 @@ public partial class PhoneController : Interactable
 
         EmitSignal(SignalName.OnPhoneKeyDialed, GetFormattedSequence());
 
-        if (currentSequence.Count == sequenceLength && isDialing)
-            CallNumber();
+
+        if ((currentSequence.Count == sequenceLength || currentSequence.Count == 3) && isDialing)
+        {
+            string numberString = string.Join("", currentSequence.ToArray());
+            GD.Print("Try fetch convo for " + numberString);
+            ConversationData? conversation = numberManager.GetConversationDataByNumber(numberString);
+            if (conversation != null) CallNumber(conversation);
+        }
     }
 
     private String GetFormattedSequence()

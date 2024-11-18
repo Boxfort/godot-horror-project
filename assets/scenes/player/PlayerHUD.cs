@@ -127,7 +127,6 @@ public partial class PlayerHUD : CanvasLayer
 
     private void OnPhoneKeyDialed(string dialedNumber)
     {
-        GD.Print("oi");
         phoneText.Visible = true;
         phoneText.Text = dialedNumber;
     }    
@@ -197,7 +196,13 @@ public partial class PlayerHUD : CanvasLayer
             ((Control)interactOutlineContainer.GetChild(i)).Position = cornerPositions[i];
         }
 
-        hoverText.Position = cornerPositions[0];
+
+        // HACK TO CENTER HOVER TEXT IN VERY TINY BOUNDING BOXES, FOR PHONE KEYS
+        if ((cornerPositions[1] - cornerPositions[2]).Y < 25) {
+            hoverText.Position = cornerPositions[0] - new Vector2(6, 4);
+        } else {
+            hoverText.Position = cornerPositions[0];
+        }
     }
 
     private Vector2[] GetCornerPositions(Vector2[] pointArray)

@@ -1,0 +1,246 @@
+[gd_scene load_steps=7 format=3 uid="uid://bxik04i0u0ivw"]
+
+[ext_resource type="Texture2D" uid="uid://rh4wmjbxy07s" path="res://assets/scenes/props/tv/testscreen-2687433236.png" id="1_s05kj"]
+[ext_resource type="FontFile" uid="uid://cqahkc31bqdkv" path="res://assets/fonts/LanaPixel.ttf" id="2_1egpi"]
+[ext_resource type="Shader" path="res://assets/shaders/vhs.gdshader" id="2_xuggl"]
+[ext_resource type="Texture2D" uid="uid://c7tgu38bi13ha" path="res://assets/scenes/props/tv/noise.jpg" id="3_63ngs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dif5x"]
+bg_color = Color(0, 0, 0, 1)
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yflhj"]
+shader = ExtResource("2_xuggl")
+shader_parameter/vhs_resolution = Vector2(800, 600)
+shader_parameter/samples = 2
+shader_parameter/crease_noise = 1.5
+shader_parameter/crease_opacity = 0.2
+shader_parameter/filter_intensity = 0.0
+shader_parameter/tape_crease_smear = 1.6
+shader_parameter/tape_crease_intensity = 0.8
+shader_parameter/tape_crease_jitter = 0.25
+shader_parameter/tape_crease_speed = 0.5
+shader_parameter/tape_crease_discoloration = 1.9
+shader_parameter/bottom_border_thickness = 20.6
+shader_parameter/bottom_border_jitter = 6.0
+shader_parameter/noise_intensity = 0.7
+shader_parameter/noise_texture = ExtResource("3_63ngs")
+
+[node name="ScreenCanvas" type="CanvasLayer"]
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(800, 600)
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 16
+
+[node name="Bounds" type="Control" parent="MarginContainer"]
+texture_filter = 1
+layout_mode = 2
+mouse_filter = 1
+
+[node name="EBS Screen" type="Control" parent="MarginContainer/Bounds"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/Bounds/EBS Screen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_s05kj")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="MarginContainer/Bounds/EBS Screen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -223.0
+offset_top = -123.0
+offset_right = 223.0
+offset_bottom = -69.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_1egpi")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_dif5x")
+text = "EMERGENCY BROADCAST SYSTEM"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="SCREEN 1" type="Control" parent="MarginContainer/Bounds"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/Bounds/SCREEN 1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0846899, 0.0846899, 0.0846899, 1)
+
+[node name="Label" type="Label" parent="MarginContainer/Bounds/SCREEN 1"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -261.0
+offset_top = 32.0
+offset_right = 261.0
+offset_bottom = 86.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_1egpi")
+theme_override_font_sizes/font_size = 32
+text = "EMERGENCY BROADCAST SYSTEM"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Label2" type="Label" parent="MarginContainer/Bounds/SCREEN 1"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -261.0
+offset_top = 176.0
+offset_right = 261.0
+offset_bottom = 425.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_1egpi")
+theme_override_font_sizes/font_size = 32
+text = "THIS IS AN EMERGENCY BROADCAST FROM THE MINISTRY OF PUBLIC SAFETY
+
+INSTRUCTIONS WILL FOLLOW.
+
+PLEASE DO NOT TURN OFF YOUR TELEVISION."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Label4" type="Label" parent="MarginContainer/Bounds/SCREEN 1"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -261.0
+offset_top = -100.0
+offset_right = 261.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.442501, 7.70092e-07, 9.62615e-08, 1)
+theme_override_fonts/font = ExtResource("2_1egpi")
+theme_override_font_sizes/font_size = 32
+text = "FOR YOUR SAFETY PLEASE CARRY OUT THE FOLLOWING INSTRUCTIONS"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="SCREEN 2" type="Control" parent="MarginContainer/Bounds"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/Bounds/SCREEN 2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0846899, 0.0846899, 0.0846899, 1)
+
+[node name="Label" type="Label" parent="MarginContainer/Bounds/SCREEN 2"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -261.0
+offset_top = 32.0
+offset_right = 261.0
+offset_bottom = 86.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_1egpi")
+theme_override_font_sizes/font_size = 32
+text = "EMERGENCY BROADCAST SYSTEM"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Label2" type="Label" parent="MarginContainer/Bounds/SCREEN 2"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -261.0
+offset_top = 176.0
+offset_right = 261.0
+offset_bottom = 425.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_1egpi")
+theme_override_font_sizes/font_size = 32
+text = "THIS IS AN EMERGENCY BROADCAST FROM THE MINISTRY OF PUBLIC SAFETY
+
+INSTRUCTIONS WILL FOLLOW.
+
+PLEASE DO NOT TURN OFF YOUR TELEVISION."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Label3" type="Label" parent="MarginContainer/Bounds/SCREEN 2"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -261.0
+offset_top = -100.0
+offset_right = 261.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.442501, 7.70092e-07, 9.62615e-08, 1)
+theme_override_fonts/font = ExtResource("2_1egpi")
+theme_override_font_sizes/font_size = 32
+text = "FOR YOUR SAFETY PLEASE CARRY OUT THE FOLLOWING INSTRUCTIONS"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="CRTShader" type="ColorRect" parent="MarginContainer/Bounds"]
+material = SubResource("ShaderMaterial_yflhj")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

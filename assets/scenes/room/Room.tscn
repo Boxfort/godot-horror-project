@@ -1,16 +1,20 @@
-[gd_scene load_steps=14 format=3 uid="uid://q2hfo0t7yqjv"]
+[gd_scene load_steps=18 format=3 uid="uid://q2hfo0t7yqjv"]
 
 [ext_resource type="Shader" path="res://assets/postprocessing/pp_band-dither.gdshader" id="1_1rspr"]
 [ext_resource type="PackedScene" uid="uid://ceanolwofwqvh" path="res://assets/scenes/computer/Computer.tscn" id="1_3liej"]
-[ext_resource type="Script" path="res://assets/scenes/managers/phonemanager/PhoneManager.cs" id="2_c87oy"]
+[ext_resource type="Script" path="res://assets/scenes/managers/phonemanager/PhoneNumberManager.cs" id="2_dmnmx"]
 [ext_resource type="PackedScene" uid="uid://dltlx5ruk6pwh" path="res://assets/scenes/player/PlayerController.tscn" id="2_houyb"]
-[ext_resource type="PackedScene" uid="uid://31jqbtlbjda7" path="res://assets/scenes/room/model/room.glb" id="3_bi267"]
+[ext_resource type="Script" path="res://assets/scenes/managers/eventmanager/EventManager.cs" id="3_xkrlr"]
 [ext_resource type="PackedScene" uid="uid://c2ne5mbox56hb" path="res://assets/scenes/computer/VT220Keyboard.tscn" id="4_s5whu"]
 [ext_resource type="PackedScene" uid="uid://82isst5s57w7" path="res://assets/scenes/computer/VT220Computer.tscn" id="5_aioxs"]
 [ext_resource type="PackedScene" uid="uid://brk48mkye6u1m" path="res://assets/scenes/phone/Phone.tscn" id="6_04r3t"]
 [ext_resource type="Texture2D" uid="uid://bv706p1rs7d87" path="res://assets/scenes/monster/monster.png" id="8_0v7kx"]
 [ext_resource type="PackedScene" uid="uid://bbo2flkia21d7" path="res://assets/scenes/stool/StoolModel.tscn" id="8_76hxd"]
+[ext_resource type="PackedScene" uid="uid://bkf4ywlubh06p" path="res://assets/scenes/room/RoomModel.tscn" id="8_l6vfj"]
 [ext_resource type="Script" path="res://assets/scenes/room/WindowMonster.cs" id="9_uuytp"]
+[ext_resource type="PackedScene" uid="uid://cvommli6bcygs" path="res://assets/scenes/props/tv/TV.tscn" id="10_upuq6"]
+[ext_resource type="Texture2D" uid="uid://c0d0qgcc7oxrd" path="res://assets/scenes/props/outside/kowloon.png" id="12_60mqk"]
+[ext_resource type="AudioStream" uid="uid://nn2uyefj7pcb" path="res://assets/scenes/room/sounds/577277__trp__fluorescent-light-fixture-buzz-clicks-noisy-lofi-2011.wav" id="13_tt6ho"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xl6o6"]
 shader = ExtResource("1_1rspr")
@@ -43,28 +47,69 @@ audio_listener_enable_3d = true
 size = Vector2i(800, 600)
 render_target_update_mode = 4
 
-[node name="PhoneManager" type="Node" parent="CanvasLayer/Dithering/SubViewport"]
-script = ExtResource("2_c87oy")
+[node name="PhoneNumberManager" type="Node" parent="CanvasLayer/Dithering/SubViewport" groups=["number_manager"]]
+script = ExtResource("2_dmnmx")
+
+[node name="EventManager" type="Node" parent="CanvasLayer/Dithering/SubViewport" groups=["number_manager"]]
+script = ExtResource("3_xkrlr")
 
 [node name="Room" type="Node3D" parent="CanvasLayer/Dithering/SubViewport"]
 
-[node name="Stool" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("8_76hxd")]
+[node name="RoomModel" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("8_l6vfj")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+
+[node name="Props" type="Node" parent="CanvasLayer/Dithering/SubViewport/Room"]
+
+[node name="Stool" parent="CanvasLayer/Dithering/SubViewport/Room/Props" instance=ExtResource("8_76hxd")]
 transform = Transform3D(0.280446, 0, 0.106537, 0, 0.3, 0, -0.106537, 0, 0.280446, -1.29448, 2.38419e-08, -1.42057)
+
+[node name="FlourescentLightAudio" type="AudioStreamPlayer3D" parent="CanvasLayer/Dithering/SubViewport/Room/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.06651, 2.94008, -1.85249)
+stream = ExtResource("13_tt6ho")
+volume_db = -30.0
+unit_size = 15.0
+max_db = -5.0
+autoplay = true
+
+[node name="WindowMonster" type="Sprite3D" parent="CanvasLayer/Dithering/SubViewport/Room/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.69421, 1.73565, -4.3)
+texture_filter = 0
+texture = ExtResource("8_0v7kx")
+script = ExtResource("9_uuytp")
+
+[node name="VisibleOnScreenNotifier3D" type="VisibleOnScreenNotifier3D" parent="CanvasLayer/Dithering/SubViewport/Room/Props/WindowMonster"]
+aabb = AABB(-0.390403, -0.659301, -0.0718676, 0.780805, 1.3186, 0.143735)
+
+[node name="VisibleOnScreenNotifier3D2" type="VisibleOnScreenNotifier3D" parent="CanvasLayer/Dithering/SubViewport/Room/Props/WindowMonster"]
+aabb = AABB(-0.159491, -0.659301, -0.0718676, 0.318982, 1.3186, 0.143735)
+
+[node name="RoomLight" type="OmniLight3D" parent="CanvasLayer/Dithering/SubViewport/Room/Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.07741, 2.57928, -1.29257)
+visible = false
+light_energy = 0.05
+
+[node name="Kowloon" type="Sprite3D" parent="CanvasLayer/Dithering/SubViewport/Room/Props"]
+transform = Transform3D(4.83366, 0, 0, 0, 4.83366, 0, 0, 0, 4.83366, 0, 1.46664, -5.81112)
+modulate = Color(0.165656, 0.165656, 0.165656, 1)
+transparent = false
+double_sided = false
+texture_filter = 0
+texture = ExtResource("12_60mqk")
+
+[node name="TV" parent="CanvasLayer/Dithering/SubViewport/Room/Props" instance=ExtResource("10_upuq6")]
+transform = Transform3D(0.3, 0, 0, 0, 0.259808, -0.15, 0, 0.15, 0.259808, 0, 2.35024, -3.59672)
 
 [node name="Computer" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("1_3liej")]
 transform = Transform3D(0.69282, 0, 0.4, 0, 0.8, 0, -0.4, 0, 0.69282, -2.2789, 1.66339, -0.687671)
 
-[node name="VT220Keyboard" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("4_s5whu")]
-transform = Transform3D(-0.0168364, 0, 0.0782083, 0, 0.08, 0, -0.0782083, 0, -0.0168364, -2.03247, 1.2, -0.867481)
+[node name="VT220Keyboard" parent="CanvasLayer/Dithering/SubViewport/Room/Computer" instance=ExtResource("4_s5whu")]
+transform = Transform3D(0.0306543, 0, 0.0951857, 0, 0.1, 0, -0.0951857, 0, 0.0306543, 0.379149, -0.579237, -0.0406313)
 
-[node name="VT220Computer" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("5_aioxs")]
-transform = Transform3D(-0.011735, 0, 0.0791346, 0, 0.08, 0, -0.0791346, 0, -0.011735, -2.24857, 1.2, -0.61761)
+[node name="VT220Computer" parent="CanvasLayer/Dithering/SubViewport/Room/Computer" instance=ExtResource("5_aioxs")]
+transform = Transform3D(0.0367557, 0, 0.0930001, 0, 0.1, 0, -0.0930001, 0, 0.0367557, -0.0109551, -0.579237, 0.0947995)
 
 [node name="PlayerController" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("2_houyb")]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.95312, 1.99745, 2.06138)
-
-[node name="RoomModel" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("3_bi267")]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.13, 1, -1.26)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="CanvasLayer/Dithering/SubViewport/Room"]
 environment = SubResource("Environment_i2sym")
@@ -73,20 +118,5 @@ environment = SubResource("Environment_i2sym")
 transform = Transform3D(0.552563, 0.589353, -0.589353, 0, 0.707107, 0.707107, 0.833471, -0.390721, 0.390721, 0, 6.69319, 0)
 visible = false
 
-[node name="OmniLight3D" type="OmniLight3D" parent="CanvasLayer/Dithering/SubViewport/Room"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.07741, 2.57928, -1.29257)
-light_energy = 0.05
-
 [node name="Phone" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("6_04r3t")]
 transform = Transform3D(0.0934652, 0, -0.0355564, 0, 0.1, 0, 0.0355564, 0, 0.0934652, -2.35175, 1.26119, -2.0096)
-
-[node name="WindowMonster" type="Sprite3D" parent="CanvasLayer/Dithering/SubViewport/Room"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.69421, 1.6, -4.3)
-texture = ExtResource("8_0v7kx")
-script = ExtResource("9_uuytp")
-
-[node name="VisibleOnScreenNotifier3D" type="VisibleOnScreenNotifier3D" parent="CanvasLayer/Dithering/SubViewport/Room/WindowMonster"]
-aabb = AABB(-0.390403, -0.659301, -0.0718676, 0.780805, 1.3186, 0.143735)
-
-[node name="VisibleOnScreenNotifier3D2" type="VisibleOnScreenNotifier3D" parent="CanvasLayer/Dithering/SubViewport/Room/WindowMonster"]
-aabb = AABB(-0.159491, -0.659301, -0.0718676, 0.318982, 1.3186, 0.143735)

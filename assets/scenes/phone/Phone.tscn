@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://brk48mkye6u1m"]
+[gd_scene load_steps=16 format=3 uid="uid://brk48mkye6u1m"]
 
 [ext_resource type="PackedScene" uid="uid://064rw1b5enj0" path="res://assets/scenes/phone/PhoneModel.tscn" id="1_2ayy8"]
 [ext_resource type="Script" path="res://assets/scenes/phone/PhoneController.cs" id="1_vronx"]
@@ -7,6 +7,11 @@
 [ext_resource type="AudioStream" uid="uid://drg3bs1wpjswo" path="res://assets/scenes/phone/sounds/rotary_winding.wav" id="5_ealyu"]
 [ext_resource type="PackedScene" uid="uid://bwakqbqevgdm1" path="res://assets/scenes/phone/PhoneHandsetModel.tscn" id="6_5qwlv"]
 [ext_resource type="AudioStream" uid="uid://uye4w6iiy3ab" path="res://assets/scenes/phone/sounds/dial_tone.wav" id="6_n84rr"]
+[ext_resource type="AudioStream" uid="uid://sjprl1abgug5" path="res://assets/scenes/phone/sounds/hangup.wav" id="6_ybu7k"]
+[ext_resource type="AudioStream" uid="uid://cxjtlgq5gbt16" path="res://assets/scenes/phone/sounds/ring.wav" id="7_g1qky"]
+[ext_resource type="AudioStream" uid="uid://cynt11w7dq5yk" path="res://assets/scenes/phone/sounds/phone_ring.wav" id="9_kkan1"]
+[ext_resource type="AudioStream" uid="uid://dvb3c4qf6gkx1" path="res://assets/scenes/phone/sounds/406240__stubb__telephone_hang-up_near.wav" id="9_mgrx2"]
+[ext_resource type="AudioStream" uid="uid://pgtome7t6uyn" path="res://assets/scenes/phone/sounds/disconnected_tone.wav" id="10_xwa1e"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ajjxk"]
 size = Vector3(4.3904, 2.36475, 3.08362)
@@ -47,7 +52,26 @@ stream = ExtResource("4_v6nvt")
 [node name="RotaryWindingAudio" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("5_ealyu")
 
+[node name="HangUpAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("6_ybu7k")
+
 [node name="DialToneAudio" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_n84rr")
+bus = &"Phone"
+
+[node name="RingToneAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_g1qky")
+bus = &"Phone"
+
+[node name="OtherHangUpAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_mgrx2")
+bus = &"Phone"
+
+[node name="DisconnectedToneAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_xwa1e")
+bus = &"Phone"
+
+[node name="RingAudio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("9_kkan1")
 
 [node name="PhoneHandset" parent="." instance=ExtResource("6_5qwlv")]

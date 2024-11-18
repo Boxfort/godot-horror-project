@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://bkf4ywlubh06p"]
+
+[ext_resource type="PackedScene" uid="uid://31jqbtlbjda7" path="res://assets/scenes/room/model/room.glb" id="1_ohacf"]
+[ext_resource type="Shader" path="res://assets/shaders/psx_lit_transparent.gdshader" id="2_flqcc"]
+[ext_resource type="Texture2D" uid="uid://bk7glhhq7mjyx" path="res://assets/scenes/room/model/window_industrial.png" id="3_geq5a"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v48h6"]
+render_priority = 0
+shader = ExtResource("2_flqcc")
+shader_parameter/precision_multiplier = 0.75
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/uv_pan_velocity = Vector2(0, 0)
+shader_parameter/albedoTex = ExtResource("3_geq5a")
+
+[node name="room" instance=ExtResource("1_ohacf")]
+
+[node name="Plane_001" parent="." index="19"]
+surface_material_override/0 = SubResource("ShaderMaterial_v48h6")

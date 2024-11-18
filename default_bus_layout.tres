@@ -1,0 +1,29 @@
+[gd_resource type="AudioBusLayout" load_steps=4 format=3 uid="uid://dwn0kaj7hpr1s"]
+
+[sub_resource type="AudioEffectEQ" id="AudioEffectEQ_ys6qv"]
+resource_name = "EQ"
+band_db/32_hz = -54.0
+band_db/100_hz = -47.0
+band_db/320_hz = -3.3
+band_db/10000_hz = -29.3
+
+[sub_resource type="AudioEffectPanner" id="AudioEffectPanner_im47w"]
+resource_name = "Panner"
+pan = 0.75
+
+[sub_resource type="AudioEffectHighPassFilter" id="AudioEffectHighPassFilter_p0kw1"]
+resource_name = "HighPassFilter"
+
+[resource]
+bus/1/name = &"Phone"
+bus/1/solo = false
+bus/1/mute = false
+bus/1/bypass_fx = false
+bus/1/volume_db = 0.0
+bus/1/send = &"Master"
+bus/1/effect/0/effect = SubResource("AudioEffectEQ_ys6qv")
+bus/1/effect/0/enabled = true
+bus/1/effect/1/effect = SubResource("AudioEffectPanner_im47w")
+bus/1/effect/1/enabled = true
+bus/1/effect/2/effect = SubResource("AudioEffectHighPassFilter_p0kw1")
+bus/1/effect/2/enabled = true

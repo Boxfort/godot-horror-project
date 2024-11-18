@@ -3,7 +3,7 @@ render_mode diffuse_lambert, vertex_lighting, cull_disabled, shadows_disabled, d
 
 uniform float precision_multiplier : hint_range(0.0, 1.0) = 1.0;
 uniform vec4 modulate_color : source_color = vec4(1.0);
-uniform sampler2D albedoTex : source_color;
+uniform sampler2D albedoTex : source_color, filter_nearest;
 uniform vec2 uv_scale = vec2(1.0, 1.0);
 uniform vec2 uv_offset = vec2(.0, .0);
 uniform vec2 uv_pan_velocity = vec2(0.0);
@@ -27,7 +27,7 @@ void vertex()
 	UV += uv_pan_velocity * TIME;
 
 	POSITION = get_snapped_pos(PROJECTION_MATRIX * MODELVIEW_MATRIX * vec4(VERTEX, 1.0));  // snap position to grid
-	POSITION /= abs(POSITION.w);  // discard depth for affine mapping
+	//POSITION /= abs(POSITION.w);  // discard depth for affine mapping
 
 	VERTEX = VERTEX;  // it breaks without this - not sure why
 }
