@@ -4,5 +4,6 @@ public enum PlayerState
     Moving,
     UsingComputer,
     UsingPhone,
+    Sitting,
     Inspecting
 }

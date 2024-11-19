@@ -14,6 +14,7 @@ public partial class PlayerStateMachine : FiniteStateMachine<PlayerState, Player
         [PlayerState.Moving] = new PlayerMovingState(),
         [PlayerState.UsingComputer] = new PlayerUsingComputerState(),
         [PlayerState.UsingPhone] = new PlayerUsingPhoneState(),
+        [PlayerState.Sitting] = new PlayerSittingState(),
     };
 
     protected override Dictionary<PlayerState, State<PlayerState, PlayerController>> States =>

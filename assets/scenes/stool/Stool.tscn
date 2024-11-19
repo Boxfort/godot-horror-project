@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://obqi2opyjlpk"]
+
+[ext_resource type="PackedScene" uid="uid://bbo2flkia21d7" path="res://assets/scenes/stool/StoolModel.tscn" id="1_d51h8"]
+[ext_resource type="Script" path="res://assets/scenes/stool/Stool.cs" id="1_eqh5h"]
+[ext_resource type="AudioStream" uid="uid://mhu05e2nb3dq" path="res://assets/scenes/stool/sounds/389417__rossbell__comforter-cloth-pass.wav" id="3_u087k"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ktmx6"]
+size = Vector3(0.702087, 0.818787, 0.709229)
+
+[node name="Stool" type="CharacterBody3D"]
+collision_layer = 4
+collision_mask = 4
+script = ExtResource("1_eqh5h")
+
+[node name="StoolModel" parent="." instance=ExtResource("1_d51h8")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00546265, 0.412494, 0.0152588)
+shape = SubResource("BoxShape3D_ktmx6")
+
+[node name="ChairSitAudio1" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.768566, 0)
+stream = ExtResource("3_u087k")
+
+[node name="ChairSitAudio2" type="AudioStreamPlayer3D" parent="."]

@@ -41,7 +41,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 
 [node name="InteractionController" type="RayCast3D" parent="Head"]
 target_position = Vector3(0, 0, -2.25)
-collision_mask = 3
+collision_mask = 7
 script = ExtResource("3_8uuf1")
 
 [node name="PhoneHandset" parent="Head" instance=ExtResource("13_66l1m")]

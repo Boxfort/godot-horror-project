@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime;
 using Godot;
 
-internal class PlayerUsingComputerState : State<PlayerState, PlayerController>
+internal class PlayerSittingState : State<PlayerState, PlayerController>
 {
     public override PlayerState StateType => PlayerState.UsingComputer;
 
@@ -14,14 +15,18 @@ internal class PlayerUsingComputerState : State<PlayerState, PlayerController>
 
     bool exiting = false;
     bool entering = false;
+    Vector3 playerTrackPosition = Vector3.Zero;
+    float playerHeight = 0;
 
     public override void Enter(PlayerController node)
     {
-        if (node.interactingWith!= null)
+        if (node.interactingWith != null)
         {
             node.interactingWith.HoverEnabled = false;
         }
 
+        playerTrackPosition = node.GlobalPosition;
+        playerHeight = node.GlobalPosition.Y;
         node.canMoveHead = false;
         entering = true;
         exiting = false;
@@ -43,15 +48,11 @@ internal class PlayerUsingComputerState : State<PlayerState, PlayerController>
         // Pre-conditions
         if (node.interactingWith == null)
         {
-            GD.PrintErr(
-                "`interactingWith` was not set before entering `PlayerUsingComputerState`."
-            );
-            return PlayerState.Moving;
+            // Just sit down
         }
         else if (!(node.interactingWith is ComputerController))
         {
-            GD.PrintErr("`interactingWith` is not of type ComputerController.");
-            return PlayerState.Moving;
+            // after sitting go to computer state, todo same for phone
         }
 
         ComputerController computer = node.interactingWith as ComputerController;
@@ -67,7 +68,6 @@ internal class PlayerUsingComputerState : State<PlayerState, PlayerController>
 
             if (hasExited)
             {
-                computer.OnEndInteracting();
                 return PlayerState.Moving;
             }
         }
@@ -79,66 +79,96 @@ internal class PlayerUsingComputerState : State<PlayerState, PlayerController>
 
             if (hasEntered)
             {
-                computer.OnBeginInteracting();
+                // n/a
             }
         }
 
         node.HandleZoom(delta);
 
-        if (Input.IsActionJustPressed("fire"))
+        if (!exiting && !entering && Input.IsActionJustPressed("fire"))
         {
             Interactable interactedWith = node.interactionController.TryInteract();
 
             if (interactedWith != null)
             {
+                /*
+                // TODO: ALLOW INTERACTING WITH PHONE AND PC
                 if (interactedWith is Inspectable inspectable)
                 {
                     node.CurrentlyInspecting = inspectable;
                     return PlayerState.Inspecting;
                 }
+                */
             }
         }
-
-        computer.IncomingRay(node.GetHeadPosition(), node.GetLookDirection());
 
         return PlayerState.None;
     }
 
-    public Vector3 interactOffset => new Vector3(0.80f, -0.70f, 0);
+    public Vector3 sittingOffset => new Vector3(0.0f, -.0f, 0.0f);
+
+    bool slidingUp = false;
+    float distanceToSlidePoint = 0;
 
     private bool HandleEntering(PlayerController node, double delta)
     {
-        var target = node.interactingWith.ToGlobal(interactOffset);
+        var stool = (Stool)node.GetTree().GetFirstNodeInGroup("stool");
+        stool.CanInteract = false;
+        stool.HoverEnabled = false;
 
-        ComputerController computer = node.interactingWith as ComputerController;
-        computer.IncomingRay(node.GetHeadPosition(), node.GetLookDirection());
-        computer.CanInteract = false;
-        computer.HoverEnabled = false;
+        Vector3 playerXYTarget = new Vector3(stool.GlobalPosition.X, playerHeight, stool.GlobalPosition.Z);
+        Vector3 playerXY = new Vector3(node.GlobalPosition.X, playerHeight, node.GlobalPosition.Z);
 
-        node.GlobalPosition = node.GlobalPosition.MoveToward(
-            target,
-            (float)delta * (1 + node.GlobalPosition.DistanceTo(target))
+        Vector3 playerSitAnimPos = Vector3.Zero;
+        Vector3 playerTrackTarget = Vector3.Zero;
+
+        if (!slidingUp) {
+            float distanceToXY = playerXY.DistanceTo(playerXYTarget);
+            if(distanceToXY < 0.5) {
+                slidingUp = true;
+                playerTrackTarget = playerXYTarget + sittingOffset;
+                distanceToSlidePoint = playerTrackPosition.DistanceTo(playerTrackTarget);
+                stool.PlaySitAudio();
+            } else {
+                playerTrackTarget = playerXYTarget;
+            }
+        } 
+        
+        if (slidingUp) {
+            playerTrackTarget = playerXYTarget + sittingOffset;
+            float distanceToFinal = playerTrackPosition.DistanceTo(playerTrackTarget);
+            var input = (1 - (distanceToFinal / distanceToSlidePoint)) * Mathf.Pi;
+            var a = Mathf.Sin(input) / 8;
+            playerSitAnimPos.Y = a;
+        }
+
+        playerTrackPosition = playerTrackPosition.MoveToward(
+            playerTrackTarget,
+            (float)delta * (1 + playerTrackPosition.DistanceTo(playerTrackTarget))
         );
-        node.LookAtSmooth(node.interactingWith.GlobalPosition, 10.0f, delta);
 
-        if (node.GlobalPosition == target)
+        if (node.GlobalPosition.IsEqualApprox(playerTrackTarget))
         {
+            GD.Print("yoo");
+            playerSitAnimPos = Vector3.Zero;
             entering = false;
             node.canMoveHead = true;
+            slidingUp = false;
             return true;
         }
 
-        //node.zoomView = false;
+        node.GlobalPosition = playerTrackPosition + playerSitAnimPos;
 
         return false;
     }
 
-    public Vector3 stopInteractOffset => new Vector3(1.0f, -0.56f, 0);
+    public Vector3 stopInteractOffset => new Vector3(0.5f, 0, 0);
 
     private bool HandleExiting(PlayerController node, double delta)
     {
-        var target = node.interactingWith.ToGlobal(stopInteractOffset);
-        ((ComputerController)node.interactingWith).DisableScreenGuiInput(true);
+        var stool = (Stool)node.GetTree().GetFirstNodeInGroup("stool");
+        var target = stool.GlobalPosition + stopInteractOffset;
+        target.Y = playerHeight;
 
         node.GlobalPosition = node.GlobalPosition.MoveToward(
             target,
@@ -149,10 +179,8 @@ internal class PlayerUsingComputerState : State<PlayerState, PlayerController>
         {
             exiting = false;
             node.canMoveHead = true;
-            node.zoomView = false;
-            ComputerController computer = node.interactingWith as ComputerController;
-            computer.CanInteract = true;
-            computer.HoverEnabled = true;
+            stool.CanInteract = true;
+            stool.HoverEnabled = true;
             return true;
         }
         node.zoomView = false;

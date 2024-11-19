@@ -38,6 +38,10 @@ internal class PlayerMovingState : State<PlayerState, PlayerController>
                     node.interactingWith = interactable;
                     return PlayerState.UsingPhone;
                 } 
+                else if (interactable is Stool) 
+                {
+                    return PlayerState.Sitting;
+                }
             }
         }
 

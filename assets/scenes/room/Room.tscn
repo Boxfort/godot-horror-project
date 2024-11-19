@@ -6,10 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://dltlx5ruk6pwh" path="res://assets/scenes/player/PlayerController.tscn" id="2_houyb"]
 [ext_resource type="Script" path="res://assets/scenes/managers/eventmanager/EventManager.cs" id="3_xkrlr"]
 [ext_resource type="PackedScene" uid="uid://c2ne5mbox56hb" path="res://assets/scenes/computer/VT220Keyboard.tscn" id="4_s5whu"]
+[ext_resource type="PackedScene" uid="uid://obqi2opyjlpk" path="res://assets/scenes/stool/Stool.tscn" id="5_8lu86"]
 [ext_resource type="PackedScene" uid="uid://82isst5s57w7" path="res://assets/scenes/computer/VT220Computer.tscn" id="5_aioxs"]
 [ext_resource type="PackedScene" uid="uid://brk48mkye6u1m" path="res://assets/scenes/phone/Phone.tscn" id="6_04r3t"]
 [ext_resource type="Texture2D" uid="uid://bv706p1rs7d87" path="res://assets/scenes/monster/monster.png" id="8_0v7kx"]
-[ext_resource type="PackedScene" uid="uid://bbo2flkia21d7" path="res://assets/scenes/stool/StoolModel.tscn" id="8_76hxd"]
 [ext_resource type="PackedScene" uid="uid://bkf4ywlubh06p" path="res://assets/scenes/room/RoomModel.tscn" id="8_l6vfj"]
 [ext_resource type="Script" path="res://assets/scenes/room/WindowMonster.cs" id="9_uuytp"]
 [ext_resource type="PackedScene" uid="uid://cvommli6bcygs" path="res://assets/scenes/props/tv/TV.tscn" id="10_upuq6"]
@@ -62,8 +62,8 @@ transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
 
 [node name="Props" type="Node" parent="CanvasLayer/Dithering/SubViewport/Room"]
 
-[node name="Stool" parent="CanvasLayer/Dithering/SubViewport/Room/Props" instance=ExtResource("8_76hxd")]
-transform = Transform3D(0.280446, 0, 0.106537, 0, 0.3, 0, -0.106537, 0, 0.280446, -1.29448, 2.38419e-08, -1.42057)
+[node name="Stool" parent="CanvasLayer/Dithering/SubViewport/Room/Props" groups=["stool"] instance=ExtResource("5_8lu86")]
+transform = Transform3D(0.968313, 0, 0.249738, 0, 1, 0, -0.249738, 0, 0.968313, -1.51592, 0, -1.43977)
 
 [node name="FlourescentLightAudio" type="AudioStreamPlayer3D" parent="CanvasLayer/Dithering/SubViewport/Room/Props"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.06651, 2.94008, -1.85249)
