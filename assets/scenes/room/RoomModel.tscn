@@ -1,8 +1,62 @@
-[gd_scene load_steps=5 format=3 uid="uid://bkf4ywlubh06p"]
+[gd_scene load_steps=16 format=3 uid="uid://bkf4ywlubh06p"]
 
 [ext_resource type="PackedScene" uid="uid://31jqbtlbjda7" path="res://assets/scenes/room/model/room.glb" id="1_ohacf"]
 [ext_resource type="Shader" path="res://assets/shaders/psx_lit_transparent.gdshader" id="2_flqcc"]
+[ext_resource type="Material" uid="uid://b04gbjtuyqfn3" path="res://assets/scenes/room/materials/WallPlasterDirty.tres" id="2_hgloa"]
+[ext_resource type="Shader" path="res://assets/shaders/psx_lit.gdshader" id="2_uwoky"]
 [ext_resource type="Texture2D" uid="uid://bk7glhhq7mjyx" path="res://assets/scenes/room/model/window_industrial.png" id="3_geq5a"]
+[ext_resource type="Texture2D" uid="uid://cl3f6v5bocqmt" path="res://assets/scenes/room/model/room_checker_floor.png" id="4_kxbla"]
+[ext_resource type="Material" uid="uid://c4bqgqi8jmc61" path="res://assets/scenes/room/materials/Dumbwaiter.tres" id="5_k441i"]
+[ext_resource type="Texture2D" uid="uid://dhtuhoxdxsq1c" path="res://assets/scenes/room/model/small_tiles.png" id="6_y0cd7"]
+[ext_resource type="Texture2D" uid="uid://d2u5q7n2cem51" path="res://assets/scenes/room/model/room_plaster_wet.png" id="7_hetuq"]
+[ext_resource type="Material" uid="uid://biu1ossq5rkvp" path="res://assets/scenes/room/materials/Ceiling.tres" id="8_x4rhx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pwar2"]
+render_priority = 0
+shader = ExtResource("2_uwoky")
+shader_parameter/precision_multiplier = 0.75
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/uv_pan_velocity = Vector2(0, 0)
+shader_parameter/flash = false
+shader_parameter/affine_mapping = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mbuhb"]
+render_priority = 0
+shader = ExtResource("2_uwoky")
+shader_parameter/precision_multiplier = 0.75
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/uv_pan_velocity = Vector2(0, 0)
+shader_parameter/flash = false
+shader_parameter/affine_mapping = false
+shader_parameter/albedoTex = ExtResource("4_kxbla")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qeics"]
+render_priority = 0
+shader = ExtResource("2_uwoky")
+shader_parameter/precision_multiplier = 0.75
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/uv_pan_velocity = Vector2(0, 0)
+shader_parameter/flash = false
+shader_parameter/affine_mapping = false
+shader_parameter/albedoTex = ExtResource("6_y0cd7")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6seav"]
+render_priority = 0
+shader = ExtResource("2_uwoky")
+shader_parameter/precision_multiplier = 0.75
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/uv_pan_velocity = Vector2(0, 0)
+shader_parameter/flash = false
+shader_parameter/affine_mapping = false
+shader_parameter/albedoTex = ExtResource("7_hetuq")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v48h6"]
 render_priority = 0
@@ -16,5 +70,25 @@ shader_parameter/albedoTex = ExtResource("3_geq5a")
 
 [node name="room" instance=ExtResource("1_ohacf")]
 
+[node name="Room_001" parent="." index="0"]
+surface_material_override/0 = ExtResource("2_hgloa")
+surface_material_override/1 = SubResource("ShaderMaterial_pwar2")
+surface_material_override/2 = SubResource("ShaderMaterial_mbuhb")
+surface_material_override/3 = ExtResource("5_k441i")
+
+[node name="Room" parent="." index="1"]
+surface_material_override/0 = SubResource("ShaderMaterial_qeics")
+surface_material_override/1 = ExtResource("2_hgloa")
+surface_material_override/2 = SubResource("ShaderMaterial_6seav")
+
+[node name="Ceiling" parent="." index="6"]
+surface_material_override/0 = ExtResource("8_x4rhx")
+
 [node name="Plane_001" parent="." index="19"]
 surface_material_override/0 = SubResource("ShaderMaterial_v48h6")
+
+[node name="Room_002" parent="." index="21"]
+surface_material_override/0 = ExtResource("5_k441i")
+
+[node name="Room_003" parent="." index="22"]
+surface_material_override/0 = ExtResource("5_k441i")

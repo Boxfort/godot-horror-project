@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://biu1ossq5rkvp"]
+
+[ext_resource type="Shader" path="res://assets/shaders/psx_lit.gdshader" id="1_crdxa"]
+[ext_resource type="Texture2D" uid="uid://bcfh7ntvp18ri" path="res://assets/scenes/room/model/ceiling.png" id="2_4c4ru"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_crdxa")
+shader_parameter/precision_multiplier = 0.75
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/uv_pan_velocity = Vector2(0, 0)
+shader_parameter/flash = false
+shader_parameter/affine_mapping = false
+shader_parameter/albedoTex = ExtResource("2_4c4ru")

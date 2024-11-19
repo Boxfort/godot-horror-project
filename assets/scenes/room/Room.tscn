@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://q2hfo0t7yqjv"]
+[gd_scene load_steps=20 format=3 uid="uid://q2hfo0t7yqjv"]
 
 [ext_resource type="Shader" path="res://assets/postprocessing/pp_band-dither.gdshader" id="1_1rspr"]
 [ext_resource type="PackedScene" uid="uid://ceanolwofwqvh" path="res://assets/scenes/computer/Computer.tscn" id="1_3liej"]
@@ -15,6 +15,8 @@
 [ext_resource type="PackedScene" uid="uid://cvommli6bcygs" path="res://assets/scenes/props/tv/TV.tscn" id="10_upuq6"]
 [ext_resource type="Texture2D" uid="uid://c0d0qgcc7oxrd" path="res://assets/scenes/props/outside/kowloon.png" id="12_60mqk"]
 [ext_resource type="AudioStream" uid="uid://nn2uyefj7pcb" path="res://assets/scenes/room/sounds/577277__trp__fluorescent-light-fixture-buzz-clicks-noisy-lofi-2011.wav" id="13_tt6ho"]
+[ext_resource type="Texture2D" uid="uid://f6ic2356owk6" path="res://assets/scenes/props/light/radial_light.png" id="16_5eujb"]
+[ext_resource type="Script" path="res://assets/scenes/props/light/Blink.cs" id="17_r0rwu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xl6o6"]
 shader = ExtResource("1_1rspr")
@@ -84,9 +86,8 @@ aabb = AABB(-0.390403, -0.659301, -0.0718676, 0.780805, 1.3186, 0.143735)
 aabb = AABB(-0.159491, -0.659301, -0.0718676, 0.318982, 1.3186, 0.143735)
 
 [node name="RoomLight" type="OmniLight3D" parent="CanvasLayer/Dithering/SubViewport/Room/Props"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.07741, 2.57928, -1.29257)
-visible = false
-light_energy = 0.05
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.07741, 2.05158, -1.29257)
+light_energy = 0.025
 
 [node name="Kowloon" type="Sprite3D" parent="CanvasLayer/Dithering/SubViewport/Room/Props"]
 transform = Transform3D(4.83366, 0, 0, 0, 4.83366, 0, 0, 0, 4.83366, 0, 1.46664, -5.81112)
@@ -98,6 +99,15 @@ texture = ExtResource("12_60mqk")
 
 [node name="TV" parent="CanvasLayer/Dithering/SubViewport/Room/Props" instance=ExtResource("10_upuq6")]
 transform = Transform3D(0.3, 0, 0, 0, 0.259808, -0.15, 0, 0.15, 0.259808, 0, 2.35024, -3.59672)
+
+[node name="Light" type="Sprite3D" parent="CanvasLayer/Dithering/SubViewport/Room/Props"]
+transform = Transform3D(-9.69802e-09, 0, -0.221865, 0, 0.221865, 0, 0.221865, 0, -9.69802e-09, -2.9787, 1.22293, 0.942007)
+visible = false
+modulate = Color(1, 0, 0, 1)
+billboard = 1
+texture_filter = 0
+texture = ExtResource("16_5eujb")
+script = ExtResource("17_r0rwu")
 
 [node name="Computer" parent="CanvasLayer/Dithering/SubViewport/Room" instance=ExtResource("1_3liej")]
 transform = Transform3D(0.69282, 0, 0.4, 0, 0.8, 0, -0.4, 0, 0.69282, -2.2789, 1.66339, -0.687671)

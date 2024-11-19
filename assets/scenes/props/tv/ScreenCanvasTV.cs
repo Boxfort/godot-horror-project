@@ -59,6 +59,8 @@ public partial class ScreenCanvasTV : CanvasLayer
         screen2.Hide();
         screen3.Hide();
 
+        await Task.Delay(1000);
+
         audio0.Play();
         await ToSignal(audio0, AudioStreamPlayer3D.SignalName.Finished);
         await Task.Delay(2000);

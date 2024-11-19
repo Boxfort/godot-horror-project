@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cvommli6bcygs"]
+[gd_scene load_steps=17 format=3 uid="uid://cvommli6bcygs"]
 
 [ext_resource type="Script" path="res://assets/scenes/props/tv/Tv.cs" id="1_ppahc"]
 [ext_resource type="PackedScene" uid="uid://bxik04i0u0ivw" path="res://assets/scenes/props/tv/ScreenCanvasTV.tscn" id="1_t0j2d"]
@@ -9,13 +9,15 @@
 [ext_resource type="Material" uid="uid://cafao46yxa4gw" path="res://assets/scenes/props/tv/materials/ScreenOffMaterial.tres" id="5_t6si2"]
 [ext_resource type="AudioStream" uid="uid://bfsef2b5hk1q7" path="res://assets/scenes/props/tv/sounds/emergency_1.wav" id="6_hxk62"]
 [ext_resource type="AudioStream" uid="uid://gin16g3uxhwt" path="res://assets/scenes/props/tv/sounds/emergency_2.wav" id="7_1rdru"]
+[ext_resource type="AudioStream" uid="uid://ck03uixjm5csa" path="res://assets/scenes/props/tv/sounds/415594__corkob__crt-computer-monitor-startup.wav" id="7_tgyab"]
 [ext_resource type="AudioStream" uid="uid://dn4enj1el3gde" path="res://assets/scenes/props/tv/sounds/emergency_3.wav" id="8_7folj"]
+[ext_resource type="AudioStream" uid="uid://w4n85fn302u6" path="res://assets/scenes/props/tv/sounds/415594__corkob__crt-computer-monitor-startup-off.wav" id="8_nbiif"]
 [ext_resource type="AudioStream" uid="uid://cs8tabf3woxd0" path="res://assets/scenes/props/tv/sounds/emergency_4.wav" id="9_6fp3q"]
 [ext_resource type="AudioStream" uid="uid://wo7aojoku664" path="res://assets/scenes/props/tv/sounds/emergency_5.wav" id="10_xaphi"]
 [ext_resource type="AudioStream" uid="uid://cy4u8tmvw3kue" path="res://assets/scenes/props/tv/sounds/emergency_6.wav" id="11_06oxq"]
 [ext_resource type="AudioStream" uid="uid://7feu7w6jer2o" path="res://assets/scenes/props/tv/sounds/emergency_7.wav" id="12_8gf0n"]
 
-[node name="TV" type="Node3D"]
+[node name="TV" type="Node3D" groups=["TV"]]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
 script = ExtResource("1_ppahc")
 
@@ -56,7 +58,18 @@ stream = ExtResource("5_2c81j")
 volume_db = -20.0
 unit_size = 20.0
 max_db = -4.0
-autoplay = true
+
+[node name="TVTurnOnAudio" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(3.33333, 0, 0, 0, 3.33333, 0, 0, 0, 3.33333, 0, 0.980655, 1.3753)
+stream = ExtResource("7_tgyab")
+unit_size = 20.0
+max_db = 0.0
+
+[node name="TVTurnOffAudio" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(3.33333, 0, 0, 0, 3.33333, 0, 0, 0, 3.33333, 0, 0.980655, 1.3753)
+stream = ExtResource("8_nbiif")
+unit_size = 20.0
+max_db = 0.0
 
 [node name="ScreenAudio" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.97418, 0)

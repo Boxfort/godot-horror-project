@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://c4bqgqi8jmc61"]
+
+[ext_resource type="Shader" path="res://assets/shaders/psx_lit.gdshader" id="1_5ld6q"]
+[ext_resource type="Texture2D" uid="uid://cwi37ibxuj07" path="res://assets/scenes/room/model/dumbwaiter.png" id="2_8amij"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_5ld6q")
+shader_parameter/precision_multiplier = 0.75
+shader_parameter/modulate_color = Color(1, 1, 1, 1)
+shader_parameter/uv_scale = Vector2(1, 1)
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/uv_pan_velocity = Vector2(0, 0)
+shader_parameter/flash = false
+shader_parameter/affine_mapping = false
+shader_parameter/albedoTex = ExtResource("2_8amij")
