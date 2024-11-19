@@ -7,12 +7,14 @@ public partial class Stool : Interactable
 
     public override string HoverString => "Stool";
 
-    AudioStreamPlayer3D sitAudio1;
+    AudioStreamPlayer3D sitAudio;
+    AudioStreamPlayer3D standAudio;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        sitAudio1 = GetNode<AudioStreamPlayer3D>("ChairSitAudio1");
+        sitAudio = GetNode<AudioStreamPlayer3D>("ChairSitAudio");
+        standAudio = GetNode<AudioStreamPlayer3D>("ChairStandAudio");
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -27,11 +29,11 @@ public partial class Stool : Interactable
 
     public void PlaySitAudio()
     {
-        sitAudio1.Play();
+        sitAudio.Play();
     }
 
     public void PlayStandAudio()
     {
-
+        standAudio.Play();
     }
 }

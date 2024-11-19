@@ -27,7 +27,6 @@ internal class PlayerSittingState : State<PlayerState, PlayerController>
 
         playerTrackPosition = node.GlobalPosition;
         playerHeight = node.GlobalPosition.Y;
-        node.canMoveHead = false;
         entering = true;
         exiting = false;
     }
@@ -60,6 +59,8 @@ internal class PlayerSittingState : State<PlayerState, PlayerController>
         // Exiting
         if (!exiting && !entering && Input.IsActionJustPressed("fire2"))
         {
+            var stool= (Stool)node.GetTree().GetFirstNodeInGroup("stool");
+            stool.PlayStandAudio();
             exiting = true;
         }
         if (exiting)
@@ -125,6 +126,7 @@ internal class PlayerSittingState : State<PlayerState, PlayerController>
         if (!slidingUp) {
             float distanceToXY = playerXY.DistanceTo(playerXYTarget);
             if(distanceToXY < 0.5) {
+                // We're now close enough to the chair, begin the sitting down portion
                 slidingUp = true;
                 playerTrackTarget = playerXYTarget + sittingOffset;
                 distanceToSlidePoint = playerTrackPosition.DistanceTo(playerTrackTarget);
@@ -137,15 +139,26 @@ internal class PlayerSittingState : State<PlayerState, PlayerController>
         if (slidingUp) {
             playerTrackTarget = playerXYTarget + sittingOffset;
             float distanceToFinal = playerTrackPosition.DistanceTo(playerTrackTarget);
-            var input = (1 - (distanceToFinal / distanceToSlidePoint)) * Mathf.Pi;
-            var a = Mathf.Sin(input) / 8;
+
+            var normalised = 1 - (distanceToFinal / distanceToSlidePoint);
+            var inputPi = normalised * Mathf.Pi;
+
+            var a = Mathf.Sin(inputPi) / 8;
             playerSitAnimPos.Y = a;
+
+            // Slow down slightly and speed up as we sit
+            playerTrackPosition = playerTrackPosition.MoveToward(
+                playerTrackTarget,
+                (float)delta * (0.8f + normalised)
+            );
+        } else {
+            playerTrackPosition = playerTrackPosition.MoveToward(
+                playerTrackTarget,
+                (float)delta * (1 + playerTrackPosition.DistanceTo(playerTrackTarget))
+            );
         }
 
-        playerTrackPosition = playerTrackPosition.MoveToward(
-            playerTrackTarget,
-            (float)delta * (1 + playerTrackPosition.DistanceTo(playerTrackTarget))
-        );
+        node.GlobalPosition = playerTrackPosition + playerSitAnimPos;
 
         if (node.GlobalPosition.IsEqualApprox(playerTrackTarget))
         {
@@ -156,8 +169,6 @@ internal class PlayerSittingState : State<PlayerState, PlayerController>
             slidingUp = false;
             return true;
         }
-
-        node.GlobalPosition = playerTrackPosition + playerSitAnimPos;
 
         return false;
     }
@@ -170,15 +181,27 @@ internal class PlayerSittingState : State<PlayerState, PlayerController>
         var target = stool.GlobalPosition + stopInteractOffset;
         target.Y = playerHeight;
 
-        node.GlobalPosition = node.GlobalPosition.MoveToward(
+        Vector3 playerSitAnimPos = Vector3.Zero;
+        float distanceToFinal = playerTrackPosition.DistanceTo(target);
+        float totalDistanceToFinal = (new Vector3(stool.GlobalPosition.X, playerHeight, stool.GlobalPosition.Z)+sittingOffset).DistanceTo(target);
+
+        var normalised = 1 - (distanceToFinal / totalDistanceToFinal);
+        var inputPi = normalised * Mathf.Pi;
+
+        var a = Mathf.Sin(inputPi) / 8;
+        playerSitAnimPos.Y = a;
+
+        // Slow down slightly and speed up as we sit
+        playerTrackPosition = playerTrackPosition.MoveToward(
             target,
-            (float)delta * (1 + node.GlobalPosition.DistanceTo(target))
+            (float)delta * (0.8f + normalised)
         );
+
+        node.GlobalPosition = playerTrackPosition + playerSitAnimPos;
 
         if (node.GlobalPosition == target)
         {
             exiting = false;
-            node.canMoveHead = true;
             stool.CanInteract = true;
             stool.HoverEnabled = true;
             return true;
