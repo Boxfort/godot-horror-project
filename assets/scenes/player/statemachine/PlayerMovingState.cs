@@ -31,12 +31,12 @@ internal class PlayerMovingState : State<PlayerState, PlayerController>
                 if (interactable is ComputerController)
                 {
                     node.interactingWith = interactable;
-                    return PlayerState.UsingComputer;
+                    return PlayerState.Sitting;
                 }
                 else if (interactable is PhoneController)
                 {
                     node.interactingWith = interactable;
-                    return PlayerState.UsingPhone;
+                    return PlayerState.Sitting;
                 } 
                 else if (interactable is Stool) 
                 {

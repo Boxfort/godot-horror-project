@@ -2,18 +2,14 @@ using System;
 using System.Collections.Generic;
 using Godot;
 
-internal class PlayerUsingComputerState : State<PlayerState, PlayerController>
+internal class PlayerUsingComputerState : SubState<PlayerState, PlayerController>
 {
     public override PlayerState StateType => PlayerState.UsingComputer;
 
-    public PlayerState PreviousState
-    {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
-    }
-
     bool exiting = false;
     bool entering = false;
+
+    Vector3 initialPlayerPosition;
 
     public override void Enter(PlayerController node)
     {
@@ -25,6 +21,7 @@ internal class PlayerUsingComputerState : State<PlayerState, PlayerController>
         node.canMoveHead = false;
         entering = true;
         exiting = false;
+        initialPlayerPosition = node.GlobalPosition;
     }
 
     public override void Exit(PlayerController node)
@@ -46,12 +43,12 @@ internal class PlayerUsingComputerState : State<PlayerState, PlayerController>
             GD.PrintErr(
                 "`interactingWith` was not set before entering `PlayerUsingComputerState`."
             );
-            return PlayerState.Moving;
+            return PlayerState.Sitting;
         }
         else if (!(node.interactingWith is ComputerController))
         {
             GD.PrintErr("`interactingWith` is not of type ComputerController.");
-            return PlayerState.Moving;
+            return PlayerState.Sitting;
         }
 
         ComputerController computer = node.interactingWith as ComputerController;
@@ -68,7 +65,7 @@ internal class PlayerUsingComputerState : State<PlayerState, PlayerController>
             if (hasExited)
             {
                 computer.OnEndInteracting();
-                return PlayerState.Moving;
+                return PlayerState.Sitting;
             }
         }
 
@@ -128,8 +125,6 @@ internal class PlayerUsingComputerState : State<PlayerState, PlayerController>
             return true;
         }
 
-        //node.zoomView = false;
-
         return false;
     }
 
@@ -137,15 +132,21 @@ internal class PlayerUsingComputerState : State<PlayerState, PlayerController>
 
     private bool HandleExiting(PlayerController node, double delta)
     {
-        var target = node.interactingWith.ToGlobal(stopInteractOffset);
         ((ComputerController)node.interactingWith).DisableScreenGuiInput(true);
 
+        var interactPos = node.interactingWith.ToGlobal(interactOffset);
+        var totalDistance = interactPos.DistanceTo(initialPlayerPosition);
+
+        var currentDistance = node.GlobalPosition.DistanceTo(initialPlayerPosition);
+
+        var normalised = 1 - (currentDistance / totalDistance);
+
         node.GlobalPosition = node.GlobalPosition.MoveToward(
-            target,
-            (float)delta * (1 + node.GlobalPosition.DistanceTo(target))
+            initialPlayerPosition,
+            (float)delta * (1 + (normalised*3))
         );
 
-        if (node.GlobalPosition == target)
+        if (node.GlobalPosition == initialPlayerPosition)
         {
             exiting = false;
             node.canMoveHead = true;
@@ -155,6 +156,7 @@ internal class PlayerUsingComputerState : State<PlayerState, PlayerController>
             computer.HoverEnabled = true;
             return true;
         }
+
         node.zoomView = false;
 
         return false;

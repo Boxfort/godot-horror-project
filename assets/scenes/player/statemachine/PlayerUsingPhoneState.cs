@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Godot;
 
-internal class PlayerUsingPhoneState : State<PlayerState, PlayerController>
+internal class PlayerUsingPhoneState : SubState<PlayerState, PlayerController>
 {
     public override PlayerState StateType => PlayerState.UsingComputer;
 
@@ -12,6 +12,8 @@ internal class PlayerUsingPhoneState : State<PlayerState, PlayerController>
 
     RotaryPhoneHole heldPhoneKey;
 
+    Vector3 initialPlayerPosition;
+
     public override void Enter(PlayerController node)
     {
         if (node.interactingWith != null)
@@ -19,6 +21,7 @@ internal class PlayerUsingPhoneState : State<PlayerState, PlayerController>
             node.interactingWith.HoverEnabled = false;
         }
 
+        initialPlayerPosition = node.GlobalPosition;
         node.canMoveHead = false;
         entering = true;
         exiting = false;
@@ -36,7 +39,6 @@ internal class PlayerUsingPhoneState : State<PlayerState, PlayerController>
         node.interactingWith = null;
         exiting = false;
         phonePickedUp = false;
-        node.handset.Hide();
     }
 
     public override PlayerState Update(PlayerController node, double delta)
@@ -45,12 +47,12 @@ internal class PlayerUsingPhoneState : State<PlayerState, PlayerController>
         if (node.interactingWith == null)
         {
             GD.PrintErr("`interactingWith` was not set before entering `PlayerUsingPhoneState`.");
-            return PlayerState.Moving;
+            return PlayerState.Sitting;
         }
         else if (!(node.interactingWith is PhoneController))
         {
             GD.PrintErr("`interactingWith` is not of type PhoneController.");
-            return PlayerState.Moving;
+            return PlayerState.Sitting;
         }
 
         PhoneController phone = node.interactingWith as PhoneController;
@@ -61,13 +63,16 @@ internal class PlayerUsingPhoneState : State<PlayerState, PlayerController>
             node.RemoveInteractionException(phone);
             exiting = true;
             phone.HangupPhone();
+            node.handset.Hide();
         }
+
         if (exiting)
         {
             bool hasExited = HandleExiting(node, delta);
 
-            if (hasExited)
-                return PlayerState.Moving;
+            if (hasExited) {
+                return PlayerState.Sitting;
+            }
         }
 
         // Entering
@@ -129,6 +134,26 @@ internal class PlayerUsingPhoneState : State<PlayerState, PlayerController>
 
     private bool HandleExiting(PlayerController node, double delta)
     {
-        return true;
+        var interactPos = node.interactingWith.ToGlobal(interactOffset);
+        var totalDistance = interactPos.DistanceTo(initialPlayerPosition);
+
+        var currentDistance = node.GlobalPosition.DistanceTo(initialPlayerPosition);
+
+        var normalised = 1 - (currentDistance / totalDistance);
+
+        node.LookAtSmooth(node.interactingWith.GlobalPosition+(Vector3.Up*0.1f), 10.0f, delta);
+
+        node.GlobalPosition = node.GlobalPosition.MoveToward(
+            initialPlayerPosition,
+            (float)delta * (1 + (normalised*3))
+        );
+
+        if (node.GlobalPosition.IsEqualApprox(initialPlayerPosition))
+        {
+            exiting = false;
+            return true;
+        }
+
+        return false;
     }
 }

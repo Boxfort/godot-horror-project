@@ -44,20 +44,14 @@ internal class PlayerSittingState : State<PlayerState, PlayerController>
 
     public override PlayerState Update(PlayerController node, double delta)
     {
-        // Pre-conditions
-        if (node.interactingWith == null)
-        {
-            // Just sit down
-        }
-        else if (!(node.interactingWith is ComputerController))
-        {
-            // after sitting go to computer state, todo same for phone
-        }
-
-        ComputerController computer = node.interactingWith as ComputerController;
-
         // Exiting
-        if (!exiting && !entering && Input.IsActionJustPressed("fire2"))
+        if (!exiting && !entering && (
+            Input.IsActionJustPressed("fire2") ||
+            Input.IsActionJustPressed("move_forward") ||
+            Input.IsActionJustPressed("move_backward") ||
+            Input.IsActionJustPressed("move_left") ||
+            Input.IsActionJustPressed("move_right")
+        ))
         {
             var stool= (Stool)node.GetTree().GetFirstNodeInGroup("stool");
             stool.PlayStandAudio();
@@ -78,9 +72,17 @@ internal class PlayerSittingState : State<PlayerState, PlayerController>
         {
             bool hasEntered = HandleEntering(node, delta);
 
+            if (node.interactingWith != null) {
+                node.LookAtSmooth(node.interactingWith.GlobalPosition+(Vector3.Up*0.1f), 10.0f, delta);
+            }
+
             if (hasEntered)
             {
-                // n/a
+                if (node.interactingWith is PhoneController) {
+                    return PlayerState.UsingPhone;
+                } else if (node.interactingWith is ComputerController) {
+                    return PlayerState.UsingComputer;
+                }
             }
         }
 
@@ -92,14 +94,17 @@ internal class PlayerSittingState : State<PlayerState, PlayerController>
 
             if (interactedWith != null)
             {
-                /*
                 // TODO: ALLOW INTERACTING WITH PHONE AND PC
-                if (interactedWith is Inspectable inspectable)
+                if (interactedWith is PhoneController phone)
                 {
-                    node.CurrentlyInspecting = inspectable;
-                    return PlayerState.Inspecting;
+                    node.interactingWith = phone;
+                    return PlayerState.UsingPhone;
+                } 
+                else if (interactedWith is ComputerController computer) 
+                {
+                    node.interactingWith = computer;
+                    return PlayerState.UsingComputer;
                 }
-                */
             }
         }
 
@@ -199,7 +204,7 @@ internal class PlayerSittingState : State<PlayerState, PlayerController>
 
         node.GlobalPosition = playerTrackPosition + playerSitAnimPos;
 
-        if (node.GlobalPosition == target)
+        if (node.GlobalPosition.IsEqualApprox(target))
         {
             exiting = false;
             stool.CanInteract = true;
