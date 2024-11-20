@@ -8,6 +8,9 @@ public partial class Terminal : Control
     [Export]
     PackedScene inputPrompt;
 
+    [Export]
+    Theme terminalLineTheme;
+
     VBoxContainer lines;
     ScrollContainer scrollContainer;
 
@@ -15,7 +18,7 @@ public partial class Terminal : Control
 
     public bool InputDisabled { get; private set; }
 
-    private int commandIdx = 0;
+    CommandEvaluator evaluator = new CommandEvaluator();
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -37,6 +40,32 @@ public partial class Terminal : Control
 
     private void OnLineSubmitted(string line)
     {
-        GD.Print("LINE SUBMITTED");
+        evaluator.EvaluateCommand(line, this);
+    }
+
+    public async Task<Label> AddLine(string text, bool instant = false)
+    {
+        TerminalLine label = new TerminalLine 
+        {
+            Theme = terminalLineTheme,
+            Text = text,
+            AutowrapMode = TextServer.AutowrapMode.Arbitrary
+        };
+
+        lines.AddChild(label);
+        // Move the line before the last one.
+        lines.MoveChild(label, lines.GetChildCount() - 2);
+
+        scrollContainer.ScrollVertical = (int)scrollContainer.GetVScrollBar().MaxValue;
+        label.ShowText(instant);
+
+        await ToSignal(label, TerminalLine.SignalName.OnLineFinishedShowing);
+
+        return label;
+    }
+
+    internal string getPromptPrefix()
+    {
+        return terminalPrompt.Prefix;
     }
 }

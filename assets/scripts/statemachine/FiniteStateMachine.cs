@@ -70,6 +70,6 @@ public abstract partial class FiniteStateMachine<T, N> : Node
         if (!(fromState is SubState<T, N> fromSubstate))
         {
             toState.Enter(node);
-        }
+        } 
     }
 }

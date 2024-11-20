@@ -7,12 +7,6 @@ internal class PlayerSittingState : State<PlayerState, PlayerController>
 {
     public override PlayerState StateType => PlayerState.UsingComputer;
 
-    public PlayerState PreviousState
-    {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
-    }
-
     bool exiting = false;
     bool entering = false;
     Vector3 playerTrackPosition = Vector3.Zero;
@@ -44,6 +38,8 @@ internal class PlayerSittingState : State<PlayerState, PlayerController>
 
     public override PlayerState Update(PlayerController node, double delta)
     {
+        var stool = (Stool)node.GetTree().GetFirstNodeInGroup("stool");
+
         // Exiting
         if (!exiting && !entering && (
             Input.IsActionJustPressed("fire2") ||
@@ -53,9 +49,9 @@ internal class PlayerSittingState : State<PlayerState, PlayerController>
             Input.IsActionJustPressed("move_right")
         ))
         {
-            var stool= (Stool)node.GetTree().GetFirstNodeInGroup("stool");
             stool.PlayStandAudio();
             exiting = true;
+            stool.EmitSignal(Stool.SignalName.OnStandUp);
         }
         if (exiting)
         {
@@ -82,6 +78,8 @@ internal class PlayerSittingState : State<PlayerState, PlayerController>
                     return PlayerState.UsingPhone;
                 } else if (node.interactingWith is ComputerController) {
                     return PlayerState.UsingComputer;
+                } else {
+                    stool.EmitSignal(Stool.SignalName.OnSitDown);
                 }
             }
         }

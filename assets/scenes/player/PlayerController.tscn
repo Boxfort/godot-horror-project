@@ -356,6 +356,28 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
+[node name="StandUpAction" type="HBoxContainer" parent="CanvasLayer/UI/ActionsContainer"]
+visible = false
+custom_minimum_size = Vector2(38, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 8
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/UI/ActionsContainer/StandUpAction"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+texture = ExtResource("9_kctl2")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/UI/ActionsContainer/StandUpAction"]
+texture_filter = 1
+layout_mode = 2
+theme = ExtResource("20_d8bub")
+text = "Stand Up"
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
 [node name="FlipPageAction" type="HBoxContainer" parent="CanvasLayer/UI/ActionsContainer"]
 visible = false
 custom_minimum_size = Vector2(70, 0)

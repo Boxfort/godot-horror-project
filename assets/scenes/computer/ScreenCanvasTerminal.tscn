@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://b556n2816hum4"]
 
 [ext_resource type="Script" path="res://assets/scenes/computer/screen/ScreenCanvas.cs" id="1_12tx7"]
-[ext_resource type="PackedScene" uid="uid://cq374r0ljbq7f" path="res://assets/scenes/computer/screen/Terminal.tscn" id="2_g7rnr"]
+[ext_resource type="PackedScene" uid="uid://dxxvcbhnmg8v8" path="res://assets/scenes/computer/screen/Terminal.tscn" id="2_g7rnr"]
 [ext_resource type="AudioStream" uid="uid://3eapbm2saxmy" path="res://assets/scenes/computer/sounds/keyboard_press_1.wav" id="4_px2s0"]
 [ext_resource type="AudioStream" uid="uid://brgexdw6rvs8q" path="res://assets/scenes/computer/sounds/keyboard_press_space.wav" id="5_65eph"]
 [ext_resource type="Shader" path="res://assets/shaders/crt.gdshader" id="24_kq2pv"]

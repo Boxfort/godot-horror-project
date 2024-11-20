@@ -3,6 +3,12 @@ using Godot;
 
 public partial class ComputerController : Interactable
 {
+    [Signal]
+    public delegate void OnBeginInteractEventHandler();
+
+    [Signal]
+    public delegate void OnEndInteractEventHandler();
+
     public override string HoverString => "Terminal";
 
     public override string InteractString => "Use";
@@ -56,6 +62,7 @@ public partial class ComputerController : Interactable
         isInteracting = true;
         screenCanvas.IsInteracting = true;
         screenViewport.GuiDisableInput = false;
+        EmitSignal(SignalName.OnBeginInteract);
     }
 
     public void OnEndInteracting()
@@ -64,6 +71,7 @@ public partial class ComputerController : Interactable
         isLookingAtScreen = false;
         screenCanvas.IsInteracting = false;
         screenViewport.GuiDisableInput = true;
+        EmitSignal(SignalName.OnEndInteract);
     }
 
     public void DisableScreenGuiInput(bool shouldDisable)

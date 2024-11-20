@@ -3,6 +3,12 @@ using System;
 
 public partial class Stool : Interactable
 {
+    [Signal]
+    public delegate void OnSitDownEventHandler();
+
+    [Signal]
+    public delegate void OnStandUpEventHandler();
+
     public override string InteractString => "Sit";
 
     public override string HoverString => "Stool";

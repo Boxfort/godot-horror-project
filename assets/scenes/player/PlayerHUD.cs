@@ -20,6 +20,7 @@ public partial class PlayerHUD : CanvasLayer
     Control putDownAction;
     Control flipPageAction;
     Control hangUpAction;
+    Control standUpAction;
 
     FadeIn fadeIn;
 
@@ -49,6 +50,13 @@ public partial class PlayerHUD : CanvasLayer
         putDownAction = GetNode<Control>("UI/ActionsContainer/PutDownAction");
         flipPageAction = GetNode<Control>("UI/ActionsContainer/FlipPageAction");
         hangUpAction = GetNode<Control>("UI/ActionsContainer/HangUpAction");
+        standUpAction = GetNode<Control>("UI/ActionsContainer/StandUpAction");
+
+        foreach (ComputerController computer in GetTree().GetNodesInGroup("computer")) 
+        {
+            computer.OnBeginInteract += OnComputerBeginInteract;
+            computer.OnEndInteract += OnComputerEndInteract;
+        }
 
         foreach (PhoneController phone in GetTree().GetNodesInGroup("phone"))
         {
@@ -58,8 +66,33 @@ public partial class PlayerHUD : CanvasLayer
             phone.OnPhoneHangUp += OnPhoneHangUp;
         }
 
+        foreach (Stool stool in GetTree().GetNodesInGroup("stool"))
+        {
+            stool.OnSitDown += OnSitDown;
+            stool.OnStandUp += OnStoolStandUp;
+        }
 
         fadeIn = GetNode<FadeIn>("FadeIn");
+    }
+
+    private void OnComputerEndInteract()
+    {
+        standUpAction.Show();
+    }
+
+    private void OnComputerBeginInteract()
+    {
+        standUpAction.Hide();
+    }
+
+    private void OnStoolStandUp()
+    {
+        standUpAction.Hide();
+    }
+
+    private void OnSitDown()
+    {
+        standUpAction.Show();
     }
 
     public void FadeIn()
@@ -134,11 +167,13 @@ public partial class PlayerHUD : CanvasLayer
     private void OnPhonePickedUp()
     {
         hangUpAction.Show();
+        standUpAction.Hide();
     }
 
     private void OnPhoneHangUp()
     {
         hangUpAction.Hide();
+        standUpAction.Show();
         OnPhoneNumberCleared();
     }
 
