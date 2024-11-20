@@ -38,9 +38,13 @@ public partial class Terminal : Control
         terminalPrompt.GrabLineFocus();
     }
 
-    private void OnLineSubmitted(string line)
+    private async void OnLineSubmitted(string line)
     {
-        evaluator.EvaluateCommand(line, this);
+        terminalPrompt.IsActive = false;
+        terminalPrompt.Hide();
+        await evaluator.EvaluateCommand(line, this);
+        terminalPrompt.IsActive = true;
+        terminalPrompt.Show();
     }
 
     public async Task<Label> AddLine(string text, bool instant = false)

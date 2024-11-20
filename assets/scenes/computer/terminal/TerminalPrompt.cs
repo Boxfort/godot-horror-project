@@ -13,7 +13,7 @@ public partial class TerminalPrompt : Control
     [Signal]
     public delegate void OnResetCommandHistoryEventHandler();
 
-    String prefix = ">";
+    String prefix = "> ";
     String caret = "_";
 
     bool caretBlinking = false;

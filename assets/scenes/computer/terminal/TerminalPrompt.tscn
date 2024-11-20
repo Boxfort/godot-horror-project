@@ -3,12 +3,13 @@
 [ext_resource type="Theme" uid="uid://b8t2rlxll6leb" path="res://assets/scenes/computer/terminal/TerminalLineTheme.tres" id="2_870o6"]
 
 [node name="TerminalPrompt" type="HBoxContainer"]
+theme_override_constants/separation = 0
 
 [node name="Prefix" type="Label" parent="."]
 layout_mode = 2
 size_flags_vertical = 1
 theme = ExtResource("2_870o6")
-text = ">"
+text = "> "
 horizontal_alignment = 1
 vertical_alignment = 1
 

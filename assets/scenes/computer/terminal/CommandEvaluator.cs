@@ -1,13 +1,14 @@
 using System;
+using System.Threading.Tasks;
 using Godot;
 
 public class CommandEvaluator
 {
     public CommandEvaluator() { }
 
-    public void EvaluateCommand(string command, Terminal terminal)
+    public async Task EvaluateCommand(string command, Terminal terminal)
     {
-        terminal.AddLine(terminal.getPromptPrefix() + " " + command, true);
+        _ = terminal.AddLine(terminal.getPromptPrefix() + command, true);
 
         String[] tokens = command.Split(' ');
 
@@ -16,10 +17,10 @@ public class CommandEvaluator
 
         switch (command) {
             case "help":
-                terminal.AddLine("no one can help you");
+                await terminal.AddLine("no one can help you");
                 break;
             default:
-                terminal.AddLine("command not found: " + tokens[0]);
+                await terminal.AddLine("command not found: " + tokens[0]);
                 break;
         }
 

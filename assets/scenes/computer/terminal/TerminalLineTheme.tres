@@ -1,21 +1,34 @@
-[gd_resource type="Theme" load_steps=5 format=3 uid="uid://b8t2rlxll6leb"]
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://b8t2rlxll6leb"]
 
 [ext_resource type="FontFile" uid="uid://4q8ot8loojfe" path="res://assets/fonts/MorePerfectDOSVGA.ttf" id="1_62oq0"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gi4be"]
+content_margin_left = 0.0
+content_margin_right = 0.0
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bxgvi"]
+content_margin_left = 0.0
+content_margin_right = 0.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0h7oq"]
+content_margin_left = 0.0
+content_margin_right = 0.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iiq88"]
+content_margin_left = 0.0
+content_margin_right = 0.0
 
 [resource]
 default_font = ExtResource("1_62oq0")
-default_font_size = 24
+default_font_size = 0
 Label/colors/font_color = Color(1, 0.501961, 0, 1)
+Label/font_sizes/font_size = 22
 Label/fonts/font = ExtResource("1_62oq0")
+Label/styles/normal = SubResource("StyleBoxEmpty_gi4be")
 LineEdit/colors/caret_color = Color(1, 0.501961, 0, 1)
 LineEdit/colors/font_color = Color(1, 0.501961, 0, 1)
 LineEdit/constants/caret_width = 8
+LineEdit/font_sizes/font_size = 22
 LineEdit/fonts/font = ExtResource("1_62oq0")
 LineEdit/styles/focus = SubResource("StyleBoxEmpty_bxgvi")
 LineEdit/styles/normal = SubResource("StyleBoxEmpty_0h7oq")
