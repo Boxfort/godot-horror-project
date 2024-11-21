@@ -101,11 +101,12 @@ internal class PlayerUsingComputerState : SubState<PlayerState, PlayerController
         return PlayerState.None;
     }
 
-    public Vector3 interactOffset => new Vector3(0.80f, -0.70f, 0);
+    public Vector3 interactOffset => new Vector3(0.70f, -0.70f, 0);
 
     private bool HandleEntering(PlayerController node, double delta)
     {
         var target = node.interactingWith.ToGlobal(interactOffset);
+        target.Y = initialPlayerPosition.Y;
 
         ComputerController computer = node.interactingWith as ComputerController;
         computer.IncomingRay(node.GetHeadPosition(), node.GetLookDirection());

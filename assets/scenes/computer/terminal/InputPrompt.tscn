@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://crg362k7sjvbl"]
+
+[ext_resource type="Script" path="res://assets/scenes/computer/terminal/InputPrompt.cs" id="1_5doi2"]
+[ext_resource type="Theme" uid="uid://b8t2rlxll6leb" path="res://assets/scenes/computer/terminal/TerminalLineTheme.tres" id="2_371ak"]
+
+[node name="InputPrompt" type="HBoxContainer"]
+script = ExtResource("1_5doi2")
+
+[node name="Prefix" type="Label" parent="."]
+layout_mode = 2
+size_flags_vertical = 1
+theme = ExtResource("2_371ak")
+text = "prefix:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="."]
+layout_mode = 2
+theme = ExtResource("2_371ak")
+expand_to_text_length = true
+context_menu_enabled = false
+shortcut_keys_enabled = false
+middle_mouse_paste_enabled = false
+selecting_enabled = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+draw_control_chars = true
+caret_blink = true
+caret_force_displayed = true

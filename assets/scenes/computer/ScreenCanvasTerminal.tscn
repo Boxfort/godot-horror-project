@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://b556n2816hum4"]
+[gd_scene load_steps=8 format=3 uid="uid://b556n2816hum4"]
 
 [ext_resource type="Script" path="res://assets/scenes/computer/screen/ScreenCanvas.cs" id="1_12tx7"]
 [ext_resource type="PackedScene" uid="uid://dxxvcbhnmg8v8" path="res://assets/scenes/computer/screen/Terminal.tscn" id="2_g7rnr"]
+[ext_resource type="PackedScene" uid="uid://crg362k7sjvbl" path="res://assets/scenes/computer/terminal/InputPrompt.tscn" id="3_dmnv7"]
 [ext_resource type="AudioStream" uid="uid://3eapbm2saxmy" path="res://assets/scenes/computer/sounds/keyboard_press_1.wav" id="4_px2s0"]
 [ext_resource type="AudioStream" uid="uid://brgexdw6rvs8q" path="res://assets/scenes/computer/sounds/keyboard_press_space.wav" id="5_65eph"]
 [ext_resource type="Shader" path="res://assets/shaders/crt.gdshader" id="24_kq2pv"]
@@ -77,6 +78,7 @@ mouse_filter = 1
 
 [node name="Terminal" parent="MarginContainer/Bounds" instance=ExtResource("2_g7rnr")]
 layout_mode = 1
+inputPrompt = ExtResource("3_dmnv7")
 
 [node name="CRTShader" type="ColorRect" parent="MarginContainer/Bounds"]
 material = SubResource("ShaderMaterial_6ova1")

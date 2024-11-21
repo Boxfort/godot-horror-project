@@ -47,6 +47,19 @@ public partial class Terminal : Control
         terminalPrompt.Show();
     }
 
+    public InputPrompt AddPrompt(String promptText)
+    {
+        InputPrompt prompt = inputPrompt.Instantiate<InputPrompt>();
+
+        lines.AddChild(prompt);
+        // Move the line before the last one.
+        lines.MoveChild(prompt, lines.GetChildCount() - 2);
+
+        prompt.Prefix = promptText;
+
+        return prompt;
+    }
+
     public async Task<Label> AddLine(string text, bool instant = false)
     {
         TerminalLine label = new TerminalLine 
@@ -57,12 +70,12 @@ public partial class Terminal : Control
         };
 
         lines.AddChild(label);
+
         // Move the line before the last one.
         lines.MoveChild(label, lines.GetChildCount() - 2);
-
         scrollContainer.ScrollVertical = (int)scrollContainer.GetVScrollBar().MaxValue;
-        label.ShowText(instant);
 
+        label.ShowText(instant);
         await ToSignal(label, TerminalLine.SignalName.OnLineFinishedShowing);
 
         return label;
