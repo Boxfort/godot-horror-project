@@ -32,10 +32,18 @@ public class ConversationNodeConverter : JsonConverter
         ConversationNode item;
         if (nodeType == "npc_speech")
         {
+            JToken flagToken = jo["set_flags"];
+            Dictionary<string, bool> flags = null;
+
+            if (flagToken != null) {
+                flags = flagToken.ToObject<Dictionary<string, bool>>();
+            } 
+
             item = new ConversationNodeNpcSpeech(
                 jo["id"].ToObject<int>(),
                 jo["next"].ToObject<int>(),
-                jo["text"].ToObject<List<string>>()
+                jo["text"].ToObject<List<string>>(),
+                flags
             );
         }
         else if (nodeType == "player_choice")

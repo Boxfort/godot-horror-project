@@ -12,7 +12,7 @@ public partial class PhoneNumberManager : Node
 {
     const string phoneDataPath = "res://assets/scenes/managers/phonemanager/phone_data.json";
 
-    Dictionary<string, bool> conversationFlags = new Dictionary<string, bool>();
+    public Dictionary<string, bool> conversationFlags = new Dictionary<string, bool>();
 
     PhoneNumberData phoneNumberData;
 
@@ -24,6 +24,14 @@ public partial class PhoneNumberManager : Node
 
         var conversationContainer = (ConversationContainer)GetTree().GetFirstNodeInGroup("conversation_container");
         conversationContainer.OnSetConversationFlag += (flag) => conversationFlags[flag] = true;
+    }
+
+    public void SetAllFlags(Dictionary<string, bool> flags)
+    {
+        foreach(string key in flags.Keys) 
+        {
+            conversationFlags[key] = flags[key];
+        }
     }
 
     public void ReadData()

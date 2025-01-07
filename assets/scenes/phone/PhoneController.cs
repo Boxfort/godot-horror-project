@@ -44,13 +44,12 @@ public partial class PhoneController : Interactable
 
     List<String> currentSequence = new();
 
-    int sequenceLength = 10;
+    int sequenceLength = 6;
 
     bool isDialing = false;
     bool canReceiveCall = true;
 
     PhoneNumberManager numberManager;
-    //NetworkManager networkManager;
 
     ConversationData incomingConversation;
     bool isRinging = false;
@@ -60,7 +59,6 @@ public partial class PhoneController : Interactable
     public override void _Ready()
     {
         numberManager = (PhoneNumberManager)GetTree().GetFirstNodeInGroup("number_manager");
-        //networkManager = (NetworkManager)GetTree().GetFirstNodeInGroup("network_manager");
 
         fingerHoles = GetNode<Node3D>("PhoneModel/Empty/FingerHoles");
         dots = GetNode<Node3D>("PhoneModel/Empty/Dots");
@@ -316,6 +314,7 @@ public partial class PhoneController : Interactable
 
     public void OnConversationComplete()
     {
+        GD.Print("Convo complete");
         otherHangUpAudio.Play();
         disconnectedToneAudio.Play();
         isDialing = true;

@@ -42,10 +42,12 @@ public partial class ConversationContainer : Control
     // TODO: Support multiple phones maybe?
     PhoneController phone;
     AudioStreamPlayer phoneAudio;
+    PhoneNumberManager numberManager;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        numberManager = (PhoneNumberManager)GetTree().GetFirstNodeInGroup("number_manager");
         optionsContainer = GetNode<VBoxContainer>("VBoxContainer");
         textLabel = GetNode<Label>("Text");
 
@@ -179,8 +181,6 @@ public partial class ConversationContainer : Control
 
     public void HandleNode(ConversationNode node)
     {
-        // TODO: set flags?
-
         if (node is ConversationNodePlayerSpeech ps)
         {
             BeginShowingText(ps.text);
@@ -192,6 +192,10 @@ public partial class ConversationContainer : Control
         else if (node is ConversationNodeNpcSpeech ns)
         {
             BeginShowingText(ns.text);
+        }
+        else
+        {
+            OnConversationComplete();
         }
     }
 
@@ -236,11 +240,14 @@ public partial class ConversationContainer : Control
         }
         else if (node is ConversationNodeNpcSpeech os)
         {
+            numberManager.SetAllFlags(os.setFlags);
             nextNodeId = os.next;
         }
         else if (node is ConversationNodePlayerChoice pc)
         {
-            nextNodeId = pc.choices[optionIdx].next;
+            PlayerChoiceData choice = pc.GetValidChoices(numberManager.conversationFlags)[optionIdx];
+            numberManager.SetAllFlags(choice.setFlags);
+            nextNodeId = choice.next;
         }
 
         if (nextNodeId != -1)
@@ -259,7 +266,7 @@ public partial class ConversationContainer : Control
         optionIdx = 0;
 
         int i = 1;
-        foreach (PlayerChoiceData choice in node.choices)
+        foreach (PlayerChoiceData choice in node.GetValidChoices(numberManager.conversationFlags))
         {
             ConversationChoiceLabel optionLabel = new ConversationChoiceLabel();
             optionLabel.ChoiceIndex = i;
@@ -271,8 +278,16 @@ public partial class ConversationContainer : Control
             i++;
         }
 
-        showingOptions = true;
-        EmitSignal(SignalName.OnConversationChoiceShow);
+        // If we don't have any valid options exit the call.
+        if (i == 1)
+        {
+            OnConversationComplete();
+        }
+        else
+        {
+            showingOptions = true;
+            EmitSignal(SignalName.OnConversationChoiceShow);
+        }
     }
 
     public void ClearOptions()

@@ -126,15 +126,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="TerminalScreen/MarginContainer/Control/ScrollContainer/Lines"]
-visible = false
 layout_mode = 2
 theme = ExtResource("2_4r2qv")
 text = "----------------------------------------
 | unix 0.0.1-alpha tty1                |
 ----------------------------------------
 | unauthorized use of this system will |
-| result in discipliniary measures up  |
-| to and including explusion.          |
+| result in discipliniary action.      |
 ----------------------------------------
  
 use 'help' for a list of available commands

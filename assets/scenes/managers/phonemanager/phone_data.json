@@ -1,6 +1,6 @@
 {
     "numbers": {
-        "001": [
+        "451001": [
             {
                 "id": 0,
                 "requirements": {},
@@ -21,25 +21,108 @@
                             {
                                 "id": 0,
                                 "text": "choice A",
+                                "requirements": {
+                                    "has_done_thing_flag": true
+                                },
                                 "next": 0
                             },
                             {
                                 "id": 1,
                                 "text": "choice B",
-                                "next": 0
+                                "next": 0,
+                                "set_flags": {
+                                    "has_done_thing_flag": true
+                                }
                             }
                         ]
                     }
                 ]
             }
         ],
-        "555012": [
+        "512204": [
+            {
+                "id": 0,
+                "requirements": {},
+                "nodes": [
+                    {
+                        "id": 0,
+                        "type": "npc_speech",
+                        "next": 1,
+                        "text": [
+                            "Hello?"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "512302": [
+            {
+                "id": 0,
+                "requirements": {},
+                "nodes": [
+                    {
+                        "id": 0,
+                        "type": "npc_speech",
+                        "next": 1,
+                        "text": [
+                            "Yes? Who's there?"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "512304": [
+            {
+                "id": 0,
+                "requirements": {"day1_called_hermit": false},
+                "nodes": [
+                    {
+                        "id": 0,
+                        "type": "npc_speech",
+                        "next": 1,
+                        "text": [
+                            "Stop calling me."
+                        ],
+                        "set_flags": {
+                            "day1_called_hermit": true
+                        }
+                    }
+                ]
+            },
+            {
+                "id": 0,
+                "requirements": {
+                    "day1_called_hermit": true
+                },
+                "nodes": [
+                    {
+                        "id": 0,
+                        "type": "npc_speech",
+                        "next": 1,
+                        "text": [
+                            "Go away."
+                        ]
+                    },
+                    {
+                        "id": 1,
+                        "type": "player_choice",
+                        "choices": [
+                            {
+                                "id": 0,
+                                "text": "wait",
+                                "next": -1
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "555555": [
             {
                 "id": 0,
                 "requirements": {
                     "has_done_thing_flag": true
                 },
-                "entry_node": 0,
                 "nodes": [
                     {
                         "id": 0,
@@ -84,8 +167,8 @@
                             "text": "Nice to meet you",
                             "next": 2,
                             "set_flags": {
-
-                            } 
+                                "has_done_thing_flag": true
+                            }
                         },
                         {
                             "id": 1,
