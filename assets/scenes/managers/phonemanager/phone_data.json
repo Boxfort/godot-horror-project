@@ -1,199 +1,400 @@
 {
-    "numbers": {
-        "451001": [
-            {
-                "id": 0,
-                "requirements": {},
-                "nodes": [
-                    {
-                        "id": 0,
-                        "type": "npc_speech",
-                        "next": 1,
-                        "text": [
-                            "This is the first line",
-                            "This is the second line"
-                        ]
-                    },
-                    {
-                        "id": 1,
-                        "type": "player_choice",
-                        "choices": [
-                            {
-                                "id": 0,
-                                "text": "choice A",
-                                "requirements": {
-                                    "has_done_thing_flag": true
-                                },
-                                "next": 0
-                            },
-                            {
-                                "id": 1,
-                                "text": "choice B",
-                                "next": 0,
-                                "set_flags": {
-                                    "has_done_thing_flag": true
-                                }
-                            }
-                        ]
-                    }
-                ]
-            }
-        ],
-        "512204": [
-            {
-                "id": 0,
-                "requirements": {},
-                "nodes": [
-                    {
-                        "id": 0,
-                        "type": "npc_speech",
-                        "next": 1,
-                        "text": [
-                            "Hello?"
-                        ]
-                    }
-                ]
-            }
-        ],
-        "512302": [
-            {
-                "id": 0,
-                "requirements": {},
-                "nodes": [
-                    {
-                        "id": 0,
-                        "type": "npc_speech",
-                        "next": 1,
-                        "text": [
-                            "Yes? Who's there?"
-                        ]
-                    }
-                ]
-            }
-        ],
-        "512304": [
-            {
-                "id": 0,
-                "requirements": {"day1_called_hermit": false},
-                "nodes": [
-                    {
-                        "id": 0,
-                        "type": "npc_speech",
-                        "next": 1,
-                        "text": [
-                            "Stop calling me."
-                        ],
-                        "set_flags": {
-                            "day1_called_hermit": true
-                        }
-                    }
-                ]
-            },
-            {
-                "id": 0,
-                "requirements": {
-                    "day1_called_hermit": true
-                },
-                "nodes": [
-                    {
-                        "id": 0,
-                        "type": "npc_speech",
-                        "next": 1,
-                        "text": [
-                            "Go away."
-                        ]
-                    },
-                    {
-                        "id": 1,
-                        "type": "player_choice",
-                        "choices": [
-                            {
-                                "id": 0,
-                                "text": "wait",
-                                "next": -1
-                            }
-                        ]
-                    }
-                ]
-            }
-        ],
-        "555555": [
-            {
-                "id": 0,
-                "requirements": {
-                    "has_done_thing_flag": true
-                },
-                "nodes": [
-                    {
-                        "id": 0,
-                        "type": "npc_speech",
-                        "next": 1,
-                        "text": [
-                            "A This is the first line"
-                        ]
-                    },
-                    {
-                        "id": 0,
-                        "type": "npc_speech",
-                        "next": 0,
-                        "text": [
-                            "B This is the first line"
-                        ]
-                    }
-                ]
-            }
-        ]
-    },
-    "named": {
-        "intro_call": {
-            "id": 0,
-            "requirements": {},
-            "nodes": [
-                {
-                    "id": 0,
-                    "type": "npc_speech",
-                    "next": 1,
-                    "text": [
-                        "Hello this is from a named call.",
-                        "I'm the main antangonist hooray."
-                    ]
-                },
-                {
-                    "id": 1,
-                    "type": "player_choice",
-                    "choices": [
-                        {
-                            "id": 0,
-                            "text": "Nice to meet you",
-                            "next": 2,
-                            "set_flags": {
-                                "has_done_thing_flag": true
-                            }
-                        },
-                        {
-                            "id": 1,
-                            "text": "You're a bitch",
-                            "next": 3
-                        }
-                    ]
-                },
-                {
-                    "id": 2,
-                    "type": "npc_speech",
-                    "next": -1,
-                    "text": [
-                        "Lovely, goodbye."
-                    ]
-                },
-                {
-                    "id": 3,
-                    "type": "npc_speech",
-                    "next": -1,
-                    "text": [
-                        "That's not very nice."
-                    ]
-                }
-            ]
-        }
-    }
+	"numbers": {
+		"451001": {
+			"_comment": "OVERSEER",
+			"entry_nodes": [
+				{
+					"node_id": 0,
+					"requirements": {
+
+					}
+				}
+			],
+			"nodes": [
+				{
+					"id": 0,
+					"type": "npc_speech",
+					"next": 1,
+					"text": [
+						"This is the first line",
+						"This is the second line"
+					]
+				},
+				{
+					"id": 1,
+					"type": "player_choice",
+					"choices": [
+						{
+							"id": 0,
+							"text": "choice A",
+							"requirements": {
+								"has_done_thing_flag": true
+							},
+							"next": 0
+						},
+						{
+							"id": 1,
+							"text": "choice B",
+							"next": 0,
+							"set_flags": {
+								"has_done_thing_flag": true
+							}
+						}
+					]
+				}
+			]
+		},
+		"512204": {
+			"_comment": "HOARDER",
+			"entry_nodes": [
+				{
+					"node_id": 0,
+					"requirements": {
+						"hoarder_introduced": false
+					}
+				},
+				{
+					"node_id": 1,
+					"requirements": {
+						"hoarder_introduced": true
+					}
+				}
+			],
+			"nodes": [
+				{
+					"id": 0,
+					"type": "npc_speech",
+					"next": 1,
+					"text": [
+						"Hello?"
+					]
+				},
+				{
+					"id": 1,
+					"type": "player_choice",
+					"choices": [
+						{
+							"id": 0,
+							"text": "Hello, this is room 204.",
+							"set_flags": {
+								"hoarder_introduced": true
+							},
+							"requirements": {
+								"hoarder_introduced": false
+							},
+							"next": 3
+						},
+						{
+							"id": 1,
+							"text": "Goodbye. [END CALL]",
+							"set_flags": {
+
+							},
+							"requirements": {
+								"hoarder_introduced": true
+							},
+							"next": -1
+						}
+					]
+				},
+				{
+					"id": 3,
+					"type": "npc_speech",
+					"next": 1,
+					"text": [
+						"Oh right.",
+						"What do you want?"
+					]
+				}
+			]
+		},
+		"512302": {
+			"_comment": "OLD WOMAN",
+			"entry_nodes": [
+				{
+					"node_id": 0,
+					"requirements": {
+
+					}
+				}
+			],
+			"nodes": [
+				{
+					"id": 0,
+					"type": "npc_speech",
+					"next": 1,
+					"text": [
+						"Yes? Who's there?"
+					]
+				},
+				{
+					"id": 1,
+					"type": "player_choice",
+					"choices": [
+						{
+							"id": 0,
+							"text": "Hello, this is room 204.",
+							"set_flags": {
+								"hoarder_introduced": true
+							},
+							"requirements": {
+								"hoarder_introduced": false
+							},
+							"next": 3
+						},
+						{
+							"id": 1,
+							"text": "Goodbye. [END CALL]",
+							"set_flags": {
+
+							},
+							"requirements": {
+								"hoarder_introduced": true
+							},
+							"next": -1
+						}
+					]
+				},
+				{
+					"id": 3,
+					"type": "npc_speech",
+					"next": 1,
+					"text": [
+						"Oh hello dear!",
+						"It's so nice to hear from someone else in the block."
+					]
+				}
+			]
+		},
+		"512304": {
+			"_comment": "HERMIT",
+			"entry_nodes": [
+				{
+					"node_id": 0,
+					"requirements": {
+
+					}
+				}
+			],
+			"nodes": [
+				{
+					"id": 0,
+					"type": "npc_speech",
+					"next": 1,
+					"text": [
+						"Go away."
+					]
+				},
+				{
+					"id": 1,
+					"type": "player_choice",
+					"choices": [
+						{
+							"id": 0,
+							"text": "wait",
+							"next": -1
+						}
+					]
+				}
+			]
+		},
+		"512104": {
+			"_comment": "TECHNICIAN",
+			"entry_nodes": [
+				{
+					"node_id": 0,
+					"requirements": {
+
+					}
+				}
+			],
+			"nodes": [
+				{
+					"id": 0,
+					"type": "npc_speech",
+					"next": 1,
+					"text": [
+						"H-Hello?"
+					]
+				},
+				{
+					"id": 1,
+					"type": "player_choice",
+					"choices": [
+						{
+							"id": 0,
+							"text": "Hello, this is room 204.",
+							"set_flags": {
+								"technician_introduced": true
+							},
+							"requirements": {
+								"technician_introduced": false
+							},
+							"next": 3
+						},
+						{
+							"id": 1,
+							"text": "Goodbye. [END CALL]",
+							"set_flags": {
+
+							},
+							"requirements": {
+								"technician_introduced": true
+							},
+							"next": -1
+						}
+					]
+				}
+			]
+		},
+		"512103": {
+			"_comment": "PROGRAMMER",
+			"entry_nodes": [
+				{
+					"node_id": 0,
+					"requirements": {
+
+					}
+				}
+			],
+			"nodes": [
+				{
+					"id": 0,
+					"type": "npc_speech",
+					"next": 1,
+					"text": [
+						"Hello?"
+					]
+				},
+				{
+					"id": 1,
+					"type": "player_choice",
+					"choices": [
+						{
+							"id": 0,
+							"text": "Hello, this is room 204.",
+							"set_flags": {
+								"programmer_introduced": true
+							},
+							"requirements": {
+								"programmer_introduced": false
+							},
+							"next": 3
+						},
+						{
+							"id": 1,
+							"text": "Goodbye. [END CALL]",
+							"set_flags": {
+
+							},
+							"requirements": {
+								"programmer_introduced": true
+							},
+							"next": -1
+						}
+					]
+				}
+			]
+		},
+		"512201": {
+			"_comment": "JOHN DOE",
+			"entry_nodes": [
+				{
+					"node_id": 0,
+					"requirements": {
+
+					}
+				}
+			],
+			"nodes": [
+				{
+					"id": 0,
+					"type": "npc_speech",
+					"next": 1,
+					"text": [
+						"Hello?"
+					]
+				},
+				{
+					"id": 1,
+					"type": "player_choice",
+					"choices": [
+						{
+							"id": 0,
+							"text": "Hello, this is room 204.",
+							"set_flags": {
+								"johndoe_introduced": true
+							},
+							"requirements": {
+								"johndoe_introduced": false
+							},
+							"next": 3
+						},
+						{
+							"id": 1,
+							"text": "Goodbye. [END CALL]",
+							"set_flags": {
+
+							},
+							"requirements": {
+								"johndoe_introduced": true
+							},
+							"next": -1
+						}
+					]
+				}
+			]
+		}
+	},
+	"named": {
+		"intro_call": {
+			"id": 0,
+			"nodes": [
+				{
+					"id": 0,
+					"type": "npc_speech",
+					"next": 1,
+					"text": [
+						"Hello this is from a named call.",
+						"I'm the main antangonist hooray."
+					]
+				},
+				{
+					"id": 1,
+					"type": "player_choice",
+					"choices": [
+						{
+							"id": 0,
+							"text": "Nice to meet you",
+							"next": 2,
+							"set_flags": {
+								"has_done_thing_flag": true
+							}
+						},
+						{
+							"id": 1,
+							"text": "You're a bitch",
+							"next": 3
+						}
+					]
+				},
+				{
+					"id": 2,
+					"type": "npc_speech",
+					"next": -1,
+					"text": [
+						"Lovely, goodbye."
+					]
+				},
+				{
+					"id": 3,
+					"type": "npc_speech",
+					"next": -1,
+					"text": [
+						"That's not very nice."
+					]
+				}
+			]
+		}
+	}
 }

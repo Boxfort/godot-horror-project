@@ -45,18 +45,13 @@ public partial class PhoneNumberManager : Node
 
     public ConversationData? GetConversationDataByNumber(string phoneNumber) 
     {
-        List<ConversationData> conversations = phoneNumberData.numbers.GetValueOrDefault(phoneNumber, new List<ConversationData>());
-
-        ConversationData? conversation = conversations.Find(conversation => 
-            conversation.requirements.All(requirement => 
-                conversationFlags.GetValueOrDefault(requirement.Key, false) == requirement.Value
-            )
-        );
+        ConversationData? conversation = null;
+        phoneNumberData.numbers.TryGetValue(phoneNumber, out conversation);
 
         return conversation;
     }
 
-        public ConversationData? GetConversationDataByName(string name) 
+    public ConversationData? GetConversationDataByName(string name) 
     {
         return phoneNumberData.named.GetValueOrDefault(name);
     }

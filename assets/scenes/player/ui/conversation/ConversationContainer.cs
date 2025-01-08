@@ -151,7 +151,7 @@ public partial class ConversationContainer : Control
     private void OnConversationStart(ConversationData conversation)
     {
         currentConversation = conversation;
-        HandleNode(conversation.GetCurrentNode());
+        HandleNode(conversation.EnterConversation(numberManager.conversationFlags));
     }
 
     private void OnPhoneHangUp()

@@ -1,13 +1,28 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
+using Newtonsoft.Json;
 
 public partial class ConversationData : Resource
 {
-    public int id;
-    public Dictionary<string, bool> requirements;
     public List<ConversationNode> nodes;
 
+    [JsonProperty(PropertyName = "entry_nodes")]
+    public List<EntryNodeData> entryNodes;
+
     private int currentNodeIdx = 0;
+
+    public ConversationNode EnterConversation(Dictionary<string, bool> flags) 
+    {
+        EntryNodeData? entryNodeData = entryNodes.Find(entry => 
+            entry.requirements.All(requirement => 
+                flags.GetValueOrDefault(requirement.Key, false) == requirement.Value
+            )
+        );
+
+        return AdvanceToNode(entryNodeData.nodeId);
+    }
 
     public ConversationNode GetCurrentNode()
     {

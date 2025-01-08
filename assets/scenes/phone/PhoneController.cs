@@ -332,7 +332,7 @@ public partial class PhoneController : Interactable
         ringToneAudio.Play();
 
         await ToSignal(
-            GetTree().CreateTimer(rng.NextInt64(3, 6)),
+            GetTree().CreateTimer(rng.NextInt64(3, 5)),
             SceneTreeTimer.SignalName.Timeout
         );
 
